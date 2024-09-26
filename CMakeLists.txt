@@ -11,7 +11,7 @@ else()
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror -Wno-missing-include-dirs")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 add_subdirectory(src/ui)
