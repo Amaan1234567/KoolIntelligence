@@ -6,22 +6,25 @@
 #include <KLocalizedContext>
 #include <KLocalizedString>
 #include <KIconTheme>
+#include "logging.hpp"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     KIconTheme::initTheme();
     QApplication app(argc, argv);
+    LOG_DEBUG("UI", "Starting QApplication");
     KLocalizedString::setApplicationDomain("koolintelligence");
+    //TODO: Add this back in when we have a proper organization name and domain
     // QApplication::setOrganizationName(QStringLiteral("KDE"));
     // QApplication::setOrganizationDomain(QStringLiteral("kde.org"));
     QApplication::setApplicationName(QStringLiteral("Kool Intelligence"));
     QApplication::setDesktopFileName(QStringLiteral("org.kde.koolintelligence"));
+    LOG_DEBUG("UI", "Finished QAppplication intialization");
 
-    // QApplication::setStyle(QStringLiteral("breeze"));
     if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
         QQuickStyle::setStyle(QStringLiteral("org.kde.desktop"));
     }
-
+    LOG_INFO("UI", "Finished loading QApplication and QQuickStyle");
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
@@ -30,6 +33,10 @@ int main(int argc, char *argv[])
     if (engine.rootObjects().isEmpty()) {
         return -1;
     }
+    LOG_INFO("UI", "Finished loading QML engine... Running app.exec()");
 
-    return app.exec();
+    int return_code = app.exec();
+
+    LOG_INFO("UI", "Exiting QApplication");
+    return return_code;
 }
