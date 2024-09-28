@@ -16,3 +16,4 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 add_subdirectory(src/ui)
 add_subdirectory(src/common)
+add_subdirectory(src/model_backend)

@@ -10,7 +10,7 @@ fi
 # Check if curl is installed, if not, install it
 if ! command -v curl &> /dev/null
 then
-    echo "curl could not be found, installing curl..."
+    echo "curl could not be found, install curl"
 fi
 
 # Install Ollama
