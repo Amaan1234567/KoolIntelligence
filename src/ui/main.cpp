@@ -8,7 +8,8 @@
 #include <KIconTheme>
 #include "logging.hpp"
 #include "model_api.hpp"
-#include "backend.hpp"
+#include "ui_backend.hpp"
+// #include "chatHistoryModel.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -32,6 +33,9 @@ int main(int argc, char* argv[])
     
     Backend backend;
     qmlRegisterSingletonInstance("org.kde.koolintelligence", 1, 0, "Backend", &backend);
+    
+    // ChatHistoryModel chatHistoryModel;
+    // qmlRegisterSingletonInstance("org.kde.koolintelligence", 1, 0, "ChatHistoryModel", &chatHistoryModel);
 
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
     engine.loadFromModule("org.kde.koolintelligence", "Main");

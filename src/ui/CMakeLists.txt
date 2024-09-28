@@ -39,7 +39,7 @@ add_subdirectory(qml)
 target_sources(koolintelligence
     PRIVATE
     main.cpp
-    backend.cpp
+    ui_backend.cpp
 )
 
 target_link_libraries(koolintelligence

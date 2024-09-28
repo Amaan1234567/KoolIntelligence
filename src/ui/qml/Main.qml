@@ -4,10 +4,6 @@ import QtQuick.Controls as Controls
 import org.kde.kirigami as Kirigami
 import org.kde.koolintelligence 1.0
 //Things to complete
-// 1. Make the chathistory above the chatfield
-// 2. make the abstract cards shaded in color
-// 3. Give colors to the headings and text
-// 4. Add settings and other needed panes
 // 5. Integrate this with cpp and pass messages to cpp
 Kirigami.ApplicationWindow {
     id: root
@@ -26,6 +22,13 @@ Kirigami.ApplicationWindow {
                 icon.name: "application-exit-symbolic"
                 shortcut: StandardKey.Quit
                 onTriggered: Qt.quit()
+            },
+            Kirigami.Action {
+                text: i18n("Settings")
+                icon.name: "preferences-system-symbolic"
+                onTriggered: {
+                    pageStack.push(settingsPage)
+                }
             }
         ]
     }
@@ -62,66 +65,35 @@ Kirigami.ApplicationWindow {
                 rightActions: [
                     Kirigami.Action {
                         icon.name: "go-next"
-                        // visible: chatField.text.length > 0
                         onTriggered: {
-                            console.log("Search text is " + chatField.text);
+                            print("Search text is " + chatField.text);
                         }
                     }
                 ]
             }
         }
-        
     }
-    ListModel {
-        id: chatHistoryModel
-        ListElement {
-            chatText: "This is what someone said jnnneosijnf fjesonfneso nisfnienkjnsk  nuiksnfikenksn niksnfikenks knikfneikjnsik kfnesiknkfes"
-            author: "LLM"
-            time: "12:00"
-            alignLeft: false
+
+    Kirigami.Page {
+        id: settingsPage
+        title: i18nc("@title", "Settings")
+        actions: [
+            Kirigami.Action {
+                text: i18n("Go Back")
+                icon.name: "go-previous-symbolic"
+                onTriggered: {
+                    pageStack.pop(settingsPage)
+                }
+            }
+        ]
+        ColumnLayout{
+            width: parent.width
+            height: parent.height
+            Controls.Label {
+                text: i18n("Settings")
+            }
         }
-        ListElement {
-            chatText: "This is what someone said jnnneosijnf fjesonfneso nisfnienkjnsk  nuiksnfikenksn niksnfikenks knikfneikjnsik kfnesiknkfes"
-            author: "User"
-            time: "12:00"
-            alignLeft: true
-        }
-        ListElement {
-            chatText: "This is what someone said jnnneosijnf fjesonfneso nisfnienkjnsk  nuiksnfikenksn niksnfikenks knikfneikjnsik kfnesiknkfes"
-            author: "LLM"
-            time: "12:00"
-            alignLeft: false
-        }
-        ListElement {
-            chatText: "This is what someone said jnnneosijnf fjesonfneso nisfnienkjnsk  nuiksnfikenksn niksnfikenks knikfneikjnsik kfnesiknkfes"
-            author: "User"
-            time: "12:00"
-            alignLeft: true
-        }
-        ListElement {
-            chatText: "This is what someone said jnnneosijnf fjesonfneso nisfnienkjnsk  nuiksnfikenksn niksnfikenks knikfneikjnsik kfnesiknkfes"
-            author: "LLM"
-            time: "12:00"
-            alignLeft: false
-        }
-        ListElement {
-            chatText: "This is what someone said jnnneosijnf fjesonfneso nisfnienkjnsk  nuiksnfikenksn niksnfikenks knikfneikjnsik kfnesiknkfes"
-            author: "User"
-            time: "12:00"
-            alignLeft: true
-        }
-        ListElement {
-            chatText: "This is what someone said jnnneosijnf fjesonfneso nisfnienkjnsk  nuiksnfikenksn niksnfikenks knikfneikjnsik kfnesiknkfes"
-            author: "LLM"
-            time: "12:00"
-            alignLeft: false
-        }
-        ListElement {
-            chatText: "This is what someone said jnnneosijnf fjesonfneso nisfnienkjnsk  nuiksnfikenksn niksnfikenks knikfneikjnsik kfnesiknkfes"
-            author: "User"
-            time: "12:00"
-            alignLeft: true
-        }
+        
     }
 
     Component {
