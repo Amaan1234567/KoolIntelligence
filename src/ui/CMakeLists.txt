@@ -1,3 +1,15 @@
+# CMake minimum version
+cmake_minimum_required(VERSION 3.10)
+
+# Project name and version
+project(KoolIntelligence VERSION 1.0 LANGUAGES CXX)
+
+# Set the C++ standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+
+
 find_package(ECM 6.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
@@ -6,6 +18,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMFindQmlModule)
 include(ECMQmlModule)
+include_directories(${CMAKE_SOURCE_DIR}/src/model_backend/)
 
 find_package(Qt6 REQUIRED COMPONENTS
     Core
@@ -33,6 +46,8 @@ target_compile_options(koolintelligence PRIVATE "-fexceptions")
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 
 add_executable(koolintelligence)
+target_compile_options(koolintelligence PRIVATE -fexceptions)
+target_link_libraries(koolintelligence PRIVATE model_backend)
 
 add_subdirectory(qml)
 
