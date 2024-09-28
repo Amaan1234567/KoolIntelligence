@@ -1,5 +1,5 @@
 #include "model_api.hpp"
-#include "../common/logging.hpp"
+#include "logging.hpp"
 
 
 // Function to execute a command and get the output

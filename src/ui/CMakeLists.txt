@@ -1,15 +1,3 @@
-# CMake minimum version
-cmake_minimum_required(VERSION 3.10)
-
-# Project name and version
-project(KoolIntelligence VERSION 1.0 LANGUAGES CXX)
-
-# Set the C++ standard
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-
-
 find_package(ECM 6.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
@@ -18,7 +6,6 @@ include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMFindQmlModule)
 include(ECMQmlModule)
-include_directories(${CMAKE_SOURCE_DIR}/src/model_backend/)
 
 find_package(Qt6 REQUIRED COMPONENTS
     Core
@@ -35,13 +22,15 @@ find_package(KF6 REQUIRED COMPONENTS
     CoreAddons
     QQC2DesktopStyle
     IconThemes
-)
+    )
+
+#these two options MUST be here only, else qt like a big dumb pussy will not allow us to compile this and throw random errors
+#YOU HAVE BEEN WARNED.(I wasted 4 hours on this piece of dumb shit)
+add_executable(koolintelligence)
+target_compile_options(koolintelligence PRIVATE "-fexceptions")
+
 
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
-
-add_executable(koolintelligence)
-target_compile_options(koolintelligence PRIVATE -fexceptions)
-target_link_libraries(koolintelligence PRIVATE model_backend)
 
 ecm_add_qml_module(koolintelligence
     URI
