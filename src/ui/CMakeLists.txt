@@ -32,10 +32,7 @@ target_compile_options(koolintelligence PRIVATE "-fexceptions")
 
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 
-ecm_add_qml_module(koolintelligence
-    URI
-    org.kde.koolintelligence
-)
+add_subdirectory(qml)
 
 target_sources(koolintelligence
     PRIVATE
