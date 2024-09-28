@@ -7,9 +7,11 @@
 #include <KLocalizedString>
 #include <KIconTheme>
 #include "logging.hpp"
+#include "model_api.hpp"
 
 int main(int argc, char* argv[])
 {
+
     KIconTheme::initTheme();
     QApplication app(argc, argv);
     LOG_DEBUG("UI", "Starting QApplication");

@@ -22,11 +22,15 @@ find_package(KF6 REQUIRED COMPONENTS
     CoreAddons
     QQC2DesktopStyle
     IconThemes
-)
+    )
+
+#these two options MUST be here only, else qt like a big dumb pussy will not allow us to compile this and throw random errors
+#YOU HAVE BEEN WARNED.(I wasted 4 hours on this piece of dumb shit)
+add_executable(koolintelligence)
+target_compile_options(koolintelligence PRIVATE "-fexceptions")
+
 
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
-
-add_executable(koolintelligence)
 
 ecm_add_qml_module(koolintelligence
     URI
@@ -53,7 +57,7 @@ target_link_libraries(koolintelligence
     KF6::I18n
     KF6::CoreAddons
     KF6::IconThemes
-    )
+)
     
 install(TARGETS koolintelligence ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.koolintelligence.desktop DESTINATION ${KDE_INSTALL_APPDIR})
