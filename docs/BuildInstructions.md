@@ -24,6 +24,12 @@ sudo dnf groupinstall "Development Tools" "Development Libraries"
 sudo dnf install cmake extra-cmake-modules kf6-kirigami2-devel kf6-ki18n-devel kf6-kcoreaddons-devel kf6-kiconthemes-devel qt6-qtbase-devel qt6-qtdeclarative-devel qt6-qtquickcontrols2-devel kf6-qqc2-desktop-style
 ```
 
+## Ubuntu: (DOES NOT WORK)
+
+Note: This will not work as kubuntu has still not packaged KDE 6. Till then this is pointless and just there for my(Rahul) reference
+```bash
+sudo apt install kirigami2-dev qml-module-org-kde-i18n-localedata qt6-base-dev libkf5iconthemes-dev qtdeclarative5-dev libkf5i18n-dev qtquickcontrols2-5-dev qml-module-org-kde-qqc2desktopstyle libkf5coreaddons-dev
+```
 ## For other distributions:
 
 The instructions were taken from this link
