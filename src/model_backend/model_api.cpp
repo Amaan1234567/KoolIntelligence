@@ -176,7 +176,7 @@ public:
     }
 
     // Method to generate an image
-    std::string generate_image(const std::string& prompt, const std::string& image_path)
+    std::string generation_with_image(const std::string& prompt, const std::string& image_path)
     {
         // Check if Ollama is installed and running
         if (!is_ollama_installed()) {
@@ -209,7 +209,7 @@ int main()
     std::string image_path = "/home/amaan/Pictures/backgrounds/raiden epic background.png";
 
     // Get the synchronous response from the model and print it
-    std::string response = model_api.generate_image(prompt, image_path);
+    std::string response = model_api.generation_with_image(prompt, image_path);
     std::cout << "Response: " << response << std::endl;
 
     return 0;
