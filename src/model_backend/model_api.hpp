@@ -1,7 +1,7 @@
 #ifndef MODEL_API_HPP
 #define MODEL_API_HPP
 
-#include <iostream>
+
 #include <string>
 #include <cstdlib>
 #include <array>
@@ -61,6 +61,5 @@ public:
     std::string generation_with_image(const std::string& prompt, const std::string& image_path);
 };
 
-#include "model_api.cpp"
 
 #endif // MODEL_API_HPP

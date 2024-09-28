@@ -1,6 +1,6 @@
 #include "model_api.hpp"
-#include "ollama.hpp"
-#include "logging.hpp"
+#include "../common/logging.hpp"
+
 
 // Function to execute a command and get the output
 std::string model_api::exec_command(const std::string& command)
@@ -23,8 +23,8 @@ bool model_api::is_ollama_installed()
     try {
         std::string result = exec_command("which ollama");
         return !result.empty(); // If ollama is found, `which` returns the path
-    } catch (const std::runtime_error& e) {
-        LOG_ERROR("model_api", "Ollama not found. Please install Ollama: " + static_cast<std::string>(e.what()));
+    } catch (const std::runtime_error& err) {
+        LOG_ERROR("model_api", "Ollama not found. Please install Ollama: ");
         return false;
     }
 }
@@ -35,8 +35,8 @@ bool model_api::is_model_installed(const std::string& model_name)
     try {
         std::string result = exec_command("ollama list");
         return result.find(model_name) != std::string::npos; // Check if model_name is in the output
-    } catch (const std::runtime_error& e) {
-        LOG_ERROR("model_api", model_name+" not found " + static_cast<std::string>(e.what()));
+    } catch (const std::runtime_error& err) {
+        LOG_ERROR("model_api", model_name+" not found ");
         return false;
     }
 }
@@ -47,8 +47,8 @@ void model_api::pull_model(const std::string& model_name)
     LOG_INFO("model_api", "Pulling model: " + model_name);
     try {
         exec_command("ollama pull " + model_name); // Pull the model
-    } catch (const std::runtime_error& e) {
-        LOG_ERROR("model_api", "Error pulling model: " + static_cast<std::string>(e.what()));
+    } catch (const std::runtime_error& err) {
+        LOG_ERROR("model_api", "Error pulling model: ");
     }
 }
 
@@ -58,8 +58,8 @@ bool model_api::is_ollama_running()
     try {
         std::string result = exec_command("curl -s http://localhost:11434");
         return !result.empty(); // If Ollama is running, it will respond
-    } catch (const std::runtime_error& e) {
-        LOG_ERROR("model_api", "Ollama not running: " + static_cast<std::string>(e.what()));
+    } catch (const std::runtime_error& err) {
+        LOG_ERROR("model_api", "Ollama not running: ");
         return false;
     }
 }
