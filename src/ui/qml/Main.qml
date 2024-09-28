@@ -3,8 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls as Controls
 import org.kde.kirigami as Kirigami
 import org.kde.koolintelligence 1.0
-//Things to complete
-// 5. Integrate this with cpp and pass messages to cpp
+
 Kirigami.ApplicationWindow {
     id: root
 
@@ -47,10 +46,9 @@ Kirigami.ApplicationWindow {
                 Controls.ScrollBar.horizontal.policy: Controls.ScrollBar.AlwaysOff
                 Controls.ScrollBar.vertical.policy: Controls.ScrollBar.AsNeeded
                 Controls.ScrollBar.vertical.interactive: true
-            
                 Kirigami.CardsListView {
                 id: cardsView
-                model: chatHistoryModel
+                model: ChatHistoryModel
                 delegate: chatHistoryDelegate
                 }
             }
@@ -77,6 +75,7 @@ Kirigami.ApplicationWindow {
     Kirigami.Page {
         id: settingsPage
         title: i18nc("@title", "Settings")
+        visible: false
         actions: [
             Kirigami.Action {
                 text: i18n("Go Back")

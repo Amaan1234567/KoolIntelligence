@@ -9,7 +9,7 @@
 #include "logging.hpp"
 #include "model_api.hpp"
 #include "ui_backend.hpp"
-// #include "chatHistoryModel.hpp"
+#include "chatHistoryModel.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -34,8 +34,8 @@ int main(int argc, char* argv[])
     Backend backend;
     qmlRegisterSingletonInstance("org.kde.koolintelligence", 1, 0, "Backend", &backend);
     
-    // ChatHistoryModel chatHistoryModel;
-    // qmlRegisterSingletonInstance("org.kde.koolintelligence", 1, 0, "ChatHistoryModel", &chatHistoryModel);
+    ChatHistoryModel chatHistoryModel;
+    qmlRegisterSingletonInstance("org.kde.koolintelligence", 1, 0, "ChatHistoryModel", &chatHistoryModel);
 
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
     engine.loadFromModule("org.kde.koolintelligence", "Main");
@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     }
     LOG_INFO("UI", "Finished loading QML engine... Running app.exec()");
 
-
+    chatHistoryModel.addChatMessage(QStringLiteral("This is a new chat"), QStringLiteral("User"), QStringLiteral("13:00"), true);
     int return_code = app.exec();
 
     LOG_INFO("UI", "Exiting QApplication");

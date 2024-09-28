@@ -40,6 +40,7 @@ target_sources(koolintelligence
     PRIVATE
     main.cpp
     ui_backend.cpp
+    chatHistoryModel.cpp
 )
 
 target_link_libraries(koolintelligence
