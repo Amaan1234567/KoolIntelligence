@@ -8,6 +8,7 @@
 #include <KIconTheme>
 #include "logging.hpp"
 #include "model_api.hpp"
+#include "backend.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -28,6 +29,9 @@ int main(int argc, char* argv[])
     }
     LOG_INFO("UI", "Finished loading QApplication and QQuickStyle");
     QQmlApplicationEngine engine;
+    
+    Backend backend;
+    qmlRegisterSingletonInstance("org.kde.koolintelligence", 1, 0, "Backend", &backend);
 
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
     engine.loadFromModule("org.kde.koolintelligence", "Main");
@@ -36,6 +40,7 @@ int main(int argc, char* argv[])
         return -1;
     }
     LOG_INFO("UI", "Finished loading QML engine... Running app.exec()");
+
 
     int return_code = app.exec();
 
