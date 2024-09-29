@@ -100,7 +100,7 @@ model_api::model_api(std::string model )
         start_ollama();
     // Check if the model is installed; if not, pull it
     if (!is_model_installed(model)) {
-        std::cout << "Model " << model << " not installed. Pulling model..." << std::endl;
+        LOG_INFO("model_api", "Model " + model + " not installed. Pulling model...");
         pull_model(model);
     }
 }

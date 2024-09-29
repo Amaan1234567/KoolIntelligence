@@ -32,19 +32,13 @@ target_compile_options(koolintelligence PRIVATE "-fexceptions")
 
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 
-ecm_add_qml_module(koolintelligence
-    URI
-    org.kde.koolintelligence
-)
+add_subdirectory(qml)
+
+file(GLOB UI_CPP_FILES *.cpp)
 
 target_sources(koolintelligence
     PRIVATE
-    main.cpp
-)
-
-ecm_target_qml_sources(koolintelligence
-    SOURCES
-    qml/Main.qml
+    ${UI_CPP_FILES}
 )
 
 target_link_libraries(koolintelligence
