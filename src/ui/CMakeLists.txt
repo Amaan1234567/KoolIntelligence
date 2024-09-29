@@ -34,11 +34,11 @@ ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 
 add_subdirectory(qml)
 
+file(GLOB UI_CPP_FILES *.cpp)
+
 target_sources(koolintelligence
     PRIVATE
-    main.cpp
-    ui_backend.cpp
-    chatHistoryModel.cpp
+    ${UI_CPP_FILES}
 )
 
 target_link_libraries(koolintelligence

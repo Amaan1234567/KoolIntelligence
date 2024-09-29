@@ -57,17 +57,22 @@ Kirigami.ApplicationWindow {
                 Layout.alignment: Qt.AlignBottom
                 Layout.fillWidth: true
                 height: 50
-                // placeholderText: i18n("What do you want to do?")
-                placeholderText: Backend.name
+                placeholderText: i18n("What do you want to do?")
                 focusSequence: StandardKey.Find
                 rightActions: [
                     Kirigami.Action {
                         icon.name: "go-next"
+                        shortcut: StandardKey.Enter
                         onTriggered: {
-                            print("Search text is " + chatField.text);
+                            UserPromptField.handleTextChange(chatField.text)
+                            chatField.text = ""
                         }
                     }
                 ]
+                Keys.onReturnPressed: {
+                    UserPromptField.handleTextChange(chatField.text)
+                    chatField.text = ""
+                }
             }
         }
     }
