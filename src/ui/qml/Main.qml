@@ -103,14 +103,7 @@ Kirigami.ApplicationWindow {
     Component {
         id: chatHistoryDelegate
         Kirigami.AbstractCard {
-            function calculateWidth(){
-                var actualWidth = parent?.width - anchors.margins
-                if(actualWidth < 0){
-                    actualWidth = 0
-                }
-                return actualWidth
-            }
-            width: calculateWidth()
+            width: parent?.width - anchors.margins
             anchors.right: alignLeft ? undefined : parent?.right
             anchors.left: alignLeft ? parent?.left : undefined
             anchors.margins: 90

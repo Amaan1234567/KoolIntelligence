@@ -66,7 +66,9 @@ static inline std::string getTimestamp()
 void App::userPrompt(const QString& text){
     LOG_DEBUG("App", "User Prompt: " + text.toStdString());
     this->chatHistoryModel->addChatMessage(text, QString::fromStdString(this->user_name), QString::fromStdString(getTimestamp()), true);
-    // this->model_api_instance->send_message(text.toStdString());
+    std::string message = this->model_api_instance->get_response(text.toStdString());
+    LOG_DEBUG("App", "Model Response: " + message);
+    this->chatHistoryModel->addChatMessage(QString::fromStdString(message), QString::fromStdString("Kool Intelligence"), QString::fromStdString(getTimestamp()), false);
 }
 
 void App::setUserName(){
