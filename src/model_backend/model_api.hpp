@@ -1,7 +1,6 @@
 #ifndef MODEL_API_HPP
 #define MODEL_API_HPP
 
-
 #include <string>
 #include <cstdlib>
 #include <array>
@@ -12,13 +11,12 @@
 #include <chrono>
 #include "ollama.hpp"
 
-
-class model_api {
+class model_api
+{
 private:
     std::string model;
     ollama::options options;
     pid_t ollama_pid; // For tracking the Ollama server process
-
 
     // Function to execute a command and get the output
     std::string exec_command(const std::string& command);
@@ -60,6 +58,5 @@ public:
     // Method to generate an image
     std::string generation_with_image(const std::string& prompt, const std::string& image_path);
 };
-
 
 #endif // MODEL_API_HPP
