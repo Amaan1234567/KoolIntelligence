@@ -4,7 +4,8 @@
 #include "model_api.hpp"
 #include "chatHistoryModel.hpp"
 #include "userPromptField.hpp"
-class App{
+class App
+{
 public:
     App(int argc, char* argv[]);
     int run();
@@ -19,5 +20,4 @@ private:
     model_api* model_api_instance;
     UserPromptField* userPromptField;
     std::string user_name;
-
 };

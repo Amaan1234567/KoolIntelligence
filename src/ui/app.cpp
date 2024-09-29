@@ -12,12 +12,14 @@
 #include "logging.hpp"
 
 template<typename T>
-inline void registerInstance(T* instance, const char* name){
+inline void registerInstance(T* instance, const char* name)
+{
     qmlRegisterSingletonInstance("org.kde.koolintelligence", 1, 0, name, instance);
     LOG_DEBUG("App", "Registered singleton instance: " + std::string(name));
 }
 
-App::App(int argc, char* argv[]){
+App::App(int argc, char* argv[])
+{
     this->setUserName();
     KIconTheme::initTheme();
     this->app = new QApplication(argc, argv);
@@ -35,8 +37,8 @@ App::App(int argc, char* argv[]){
     }
     LOG_INFO("App", "Finished loading QApplication and QQuickStyle");
     this->engine = new QQmlApplicationEngine();
-    this->chatHistoryModel = new ChatHistoryModel();     
-    this->model_api_instance = new model_api();   
+    this->chatHistoryModel = new ChatHistoryModel();
+    this->model_api_instance = new model_api();
     this->userPromptField = new UserPromptField();
     this->userPromptField->setApp((void*)this);
     registerInstance(this->chatHistoryModel, "ChatHistoryModel");
@@ -45,7 +47,8 @@ App::App(int argc, char* argv[]){
     this->engine->loadFromModule("org.kde.koolintelligence", "Main");
 }
 
-int App::run(){
+int App::run()
+{
     if (this->engine->rootObjects().isEmpty()) {
         return -1;
     }
@@ -63,28 +66,31 @@ static inline std::string getTimestamp()
     return std::string(buf);
 }
 
-void App::userPrompt(const QString& text){
+void App::userPrompt(const QString& text)
+{
     LOG_DEBUG("App", "User Prompt: " + text.toStdString());
-    this->chatHistoryModel->addChatMessage(text, QString::fromStdString(this->user_name), QString::fromStdString(getTimestamp()), true);
+    this->chatHistoryModel->addChatMessage(text, QString::fromStdString(this->user_name),
+                                           QString::fromStdString(getTimestamp()), true);
     std::string message = this->model_api_instance->get_response(text.toStdString());
     LOG_DEBUG("App", "Model Response: " + message);
-    this->chatHistoryModel->addChatMessage(QString::fromStdString(message), QString::fromStdString("Kool Intelligence"), QString::fromStdString(getTimestamp()), false);
+    this->chatHistoryModel->addChatMessage(QString::fromStdString(message), QString::fromStdString("Kool Intelligence"),
+                                           QString::fromStdString(getTimestamp()), false);
 }
 
-void App::setUserName(){
+void App::setUserName()
+{
     uid_t uid = geteuid();
-    struct passwd *pw = getpwuid (uid);
-    if (pw)
-    {
+    struct passwd* pw = getpwuid(uid);
+    if (pw) {
         this->user_name = std::string(pw->pw_name);
         LOG_INFO("App", "Detected user name: " + this->user_name);
-    } else
-    {
+    } else {
         LOG_ERROR("App", "Could not detect user name");
     }
 }
 
-App::~App(){
+App::~App()
+{
     delete this->chatHistoryModel;
     delete this->engine;
     delete this->app;

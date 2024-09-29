@@ -1,7 +1,6 @@
 #include "model_api.hpp"
 #include "logging.hpp"
 
-
 // Function to execute a command and get the output
 std::string model_api::exec_command(const std::string& command)
 {
@@ -36,7 +35,7 @@ bool model_api::is_model_installed(const std::string& model_name)
         std::string result = exec_command("ollama list");
         return result.find(model_name) != std::string::npos; // Check if model_name is in the output
     } catch (const std::runtime_error& err) {
-        LOG_ERROR("model_api", model_name+" not found ");
+        LOG_ERROR("model_api", model_name + " not found ");
         return false;
     }
 }
@@ -89,8 +88,9 @@ void model_api::stop_ollama()
 }
 
 // Constructor with initializer list
-model_api::model_api(std::string model )
-    : model(model), ollama_pid(0)
+model_api::model_api(std::string model)
+    : model(model)
+    , ollama_pid(0)
 {
     // Initialize options with some default values
     options["temperature"] = 0.5;
@@ -149,7 +149,7 @@ void model_api::get_response_async(const std::string& prompt)
     // Check if Ollama is installed and running
     if (!is_ollama_installed()) {
         LOG_ERROR("model_api", "Ollama is not installed on this system.");
-        return ;
+        return;
     }
     if (!is_ollama_running()) {
         LOG_INFO("model_api", "Ollama is installed but not running. Starting Ollama...");
