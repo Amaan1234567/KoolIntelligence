@@ -1,7 +1,6 @@
 #include "chatHistoryModel.hpp"
 
-void ChatHistoryModel::addChatMessage(const QString& chatText, const QString& author, const QString& time,
-                                      bool alignLeft)
+void ChatHistoryModel::addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft)
 {
     beginInsertRows(QModelIndex(), m_chatHistory.count(), m_chatHistory.count());
     m_chatHistory.append({chatText, author, time, alignLeft});
@@ -18,12 +17,12 @@ QHash<int, QByteArray> ChatHistoryModel::roleNames() const
     return roles;
 }
 
-QVariant ChatHistoryModel::data(const QModelIndex& index, int role) const
+QVariant ChatHistoryModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.row() >= m_chatHistory.count())
         return QVariant();
 
-    const ChatMessage& message = m_chatHistory[index.row()];
+    const ChatMessage &message = m_chatHistory[index.row()];
     if (role == ChatTextRole)
         return message.chatText;
     else if (role == AuthorRole)
@@ -35,7 +34,7 @@ QVariant ChatHistoryModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int ChatHistoryModel::rowCount(const QModelIndex& parent) const
+int ChatHistoryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_chatHistory.count();

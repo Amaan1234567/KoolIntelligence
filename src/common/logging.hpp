@@ -8,7 +8,7 @@ enum class LogLevel { DEBUG = 0, INFO = 1, WARNING = 2, ERROR = 3, CRITICAL = 4 
 class Logger
 {
 public:
-    static Logger& getInstance()
+    static Logger &getInstance()
     {
         static Logger instance;
         return instance;
@@ -18,8 +18,8 @@ public:
 private:
     Logger();
     ~Logger();
-    Logger(const Logger&) = delete;
-    Logger& operator=(const Logger&) = delete;
+    Logger(const Logger &) = delete;
+    Logger &operator=(const Logger &) = delete;
     std::ofstream m_logFileStream;
 };
 

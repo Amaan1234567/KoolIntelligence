@@ -1,33 +1,33 @@
-#include <QtQml>
-#include <QUrl>
-#include <QQuickStyle>
+#include <KIconTheme>
 #include <KLocalizedContext>
 #include <KLocalizedString>
-#include <KIconTheme>
+#include <QQuickStyle>
+#include <QUrl>
+#include <QtQml>
+#include <pwd.h>
 #include <string>
 #include <unistd.h>
-#include <pwd.h>
 
 #include "app.hpp"
 #include "logging.hpp"
 
 template<typename T>
-inline void registerInstance(T* instance, const char* name)
+inline void registerInstance(T *instance, const char *name)
 {
     qmlRegisterSingletonInstance("org.kde.koolintelligence", 1, 0, name, instance);
     LOG_DEBUG("App", "Registered singleton instance: " + std::string(name));
 }
 
-App::App(int argc, char* argv[])
+App::App(int argc, char *argv[])
 {
     this->setUserName();
     KIconTheme::initTheme();
     this->app = new QApplication(argc, argv);
     LOG_DEBUG("App", "Starting QApplication");
     KLocalizedString::setApplicationDomain("koolintelligence");
-    //TODO: Add this back in when we have a proper organization name and domain
-    // QApplication::setOrganizationName(QStringLiteral("KDE"));
-    // QApplication::setOrganizationDomain(QStringLiteral("kde.org"));
+    // TODO: Add this back in when we have a proper organization name and domain
+    //  QApplication::setOrganizationName(QStringLiteral("KDE"));
+    //  QApplication::setOrganizationDomain(QStringLiteral("kde.org"));
     QApplication::setApplicationName(QStringLiteral("Kool Intelligence"));
     QApplication::setDesktopFileName(QStringLiteral("org.kde.koolintelligence"));
     LOG_DEBUG("App", "Finished QAppplication intialization");
@@ -40,7 +40,7 @@ App::App(int argc, char* argv[])
     this->chatHistoryModel = new ChatHistoryModel();
     this->model_api_instance = new model_api();
     this->userPromptField = new UserPromptField();
-    this->userPromptField->setApp((void*)this);
+    this->userPromptField->setApp((void *)this);
     registerInstance(this->chatHistoryModel, "ChatHistoryModel");
     registerInstance(this->userPromptField, "UserPromptField");
     this->engine->rootContext()->setContextObject(new KLocalizedContext(this->engine));
@@ -66,21 +66,22 @@ static inline std::string getTimestamp()
     return std::string(buf);
 }
 
-void App::userPrompt(const QString& text)
+void App::userPrompt(const QString &text)
 {
     LOG_DEBUG("App", "User Prompt: " + text.toStdString());
-    this->chatHistoryModel->addChatMessage(text, QString::fromStdString(this->user_name),
-                                           QString::fromStdString(getTimestamp()), true);
+    this->chatHistoryModel->addChatMessage(text, QString::fromStdString(this->user_name), QString::fromStdString(getTimestamp()), true);
     std::string message = this->model_api_instance->get_response(text.toStdString());
     LOG_DEBUG("App", "Model Response: " + message);
-    this->chatHistoryModel->addChatMessage(QString::fromStdString(message), QString::fromStdString("Kool Intelligence"),
-                                           QString::fromStdString(getTimestamp()), false);
+    this->chatHistoryModel->addChatMessage(QString::fromStdString(message),
+                                           QString::fromStdString("Kool Intelligence"),
+                                           QString::fromStdString(getTimestamp()),
+                                           false);
 }
 
 void App::setUserName()
 {
     uid_t uid = geteuid();
-    struct passwd* pw = getpwuid(uid);
+    struct passwd *pw = getpwuid(uid);
     if (pw) {
         this->user_name = std::string(pw->pw_name);
         LOG_INFO("App", "Detected user name: " + this->user_name);
