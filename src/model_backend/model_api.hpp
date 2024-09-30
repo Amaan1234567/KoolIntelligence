@@ -1,7 +1,7 @@
 #ifndef MODEL_API_HPP
 #define MODEL_API_HPP
 
-#include "ollama.hpp"
+#include "thirdparty/ollama.hpp"
 #include <array>
 #include <chrono>
 #include <cstdio>
