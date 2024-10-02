@@ -1,0 +1,8 @@
+set(CMAKE_CUDA_HOST_COMPILER "/home/linuxbrew/.linuxbrew/bin/gcc-12")
+set(BUILD_SHARED_LIBS OFF)
+# set(WHISPER_OPENVINO ON)
+set(GGML_CUDA ON)
+add_subdirectory(whisper.cpp)
+target_include_directories(koolintelligence PUBLIC whisper.cpp/include)
+target_include_directories(koolintelligence PUBLIC whisper.cpp/spm-headers)
+target_link_libraries(koolintelligence PRIVATE whisper)

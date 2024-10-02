@@ -1,5 +1,6 @@
 #include "model_api.hpp"
 #include "logging.hpp"
+#include "whisper.h"
 
 // Function to execute a command and get the output
 std::string model_api::exec_command(const std::string &command)
