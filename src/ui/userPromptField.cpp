@@ -1,14 +1,14 @@
 #include "userPromptField.hpp"
-#include "logging.hpp"
 #include "app.hpp"
+#include "logging.hpp"
 
-void UserPromptField::handleTextChange(const QString& text)
+void UserPromptField::handleTextChange(const QString &text)
 {
     LOG_DEBUG("UserPromptField", "User Prompt: " + text.toStdString());
-    ((App*)this->app)->userPrompt(text);
+    ((App *)this->app)->userPrompt(text);
 }
 
-void UserPromptField::setApp(void* app)
+void UserPromptField::setApp(void *app)
 {
     this->app = app;
 }

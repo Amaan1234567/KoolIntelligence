@@ -2,7 +2,7 @@
 #include "logging.hpp"
 
 // Function to execute a command and get the output
-std::string model_api::exec_command(const std::string& command)
+std::string model_api::exec_command(const std::string &command)
 {
     std::array<char, 128> buffer;
     std::string result;
@@ -22,31 +22,31 @@ bool model_api::is_ollama_installed()
     try {
         std::string result = exec_command("which ollama");
         return !result.empty(); // If ollama is found, `which` returns the path
-    } catch (const std::runtime_error& err) {
+    } catch (const std::runtime_error &err) {
         LOG_ERROR("model_api", "Ollama not found. Please install Ollama: ");
         return false;
     }
 }
 
 // Function to check if the required model is installed
-bool model_api::is_model_installed(const std::string& model_name)
+bool model_api::is_model_installed(const std::string &model_name)
 {
     try {
         std::string result = exec_command("ollama list");
         return result.find(model_name) != std::string::npos; // Check if model_name is in the output
-    } catch (const std::runtime_error& err) {
+    } catch (const std::runtime_error &err) {
         LOG_ERROR("model_api", model_name + " not found ");
         return false;
     }
 }
 
 // Function to pull a model if it is not installed
-void model_api::pull_model(const std::string& model_name)
+void model_api::pull_model(const std::string &model_name)
 {
     LOG_INFO("model_api", "Pulling model: " + model_name);
     try {
         exec_command("ollama pull " + model_name); // Pull the model
-    } catch (const std::runtime_error& err) {
+    } catch (const std::runtime_error &err) {
         LOG_ERROR("model_api", "Error pulling model: ");
     }
 }
@@ -57,7 +57,7 @@ bool model_api::is_ollama_running()
     try {
         std::string result = exec_command("curl -s http://localhost:11434");
         return !result.empty(); // If Ollama is running, it will respond
-    } catch (const std::runtime_error& err) {
+    } catch (const std::runtime_error &err) {
         LOG_ERROR("model_api", "Ollama not running: ");
         return false;
     }
@@ -113,13 +113,13 @@ model_api::~model_api()
 }
 
 // Set additional options if needed
-void model_api::set_option(const std::string& key, int value)
+void model_api::set_option(const std::string &key, int value)
 {
     options[key] = value;
 }
 
 // Method to run inference and return the response, passing the prompt as a parameter
-std::string model_api::get_response(const std::string& prompt)
+std::string model_api::get_response(const std::string &prompt)
 {
     // Check if Ollama is installed and running
     if (!is_ollama_installed()) {
@@ -137,9 +137,9 @@ std::string model_api::get_response(const std::string& prompt)
 }
 
 // Async method to handle token-based streaming, passing the prompt as a parameter
-void model_api::get_response_async(const std::string& prompt)
+void model_api::get_response_async(const std::string &prompt)
 {
-    auto on_receive_response = [](const ollama::response& response) {
+    auto on_receive_response = [](const ollama::response &response) {
         std::cout << response << std::flush;
         if (response.as_json()["done"] == true) {
             std::cout << std::endl;
@@ -161,7 +161,7 @@ void model_api::get_response_async(const std::string& prompt)
 }
 
 // Method to generate an image
-std::string model_api::generation_with_image(const std::string& prompt, const std::string& image_path)
+std::string model_api::generation_with_image(const std::string &prompt, const std::string &image_path)
 {
     // Check if Ollama is installed and running
     if (!is_ollama_installed()) {

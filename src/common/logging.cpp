@@ -1,12 +1,12 @@
 #include "logging.hpp"
 
-#include <string>
-#include <sstream>
 #include <cstdlib>
 #include <ctime>
-#include <thread>
 #include <filesystem>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <thread>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -15,7 +15,7 @@
 #endif
 
 namespace fs = std::filesystem;
-static inline const char* logLevelToString(LogLevel level)
+static inline const char *logLevelToString(LogLevel level)
 {
     switch (level) {
     case LogLevel::DEBUG:
@@ -60,9 +60,8 @@ static inline std::string getProcessID()
 void Logger::log(LogLevel level, std::string_view className, std::string_view message)
 {
     if (static_cast<int>(level) >= LOG_LEVEL) {
-        std::string output = "[" + getTimestamp() + "][PID:" + getProcessID() + "][TID:" + getThreadID()
-            + "][Kool Intelligence log][" + std::string(className) + "][" + logLevelToString(level)
-            + "]: " + std::string(message);
+        std::string output = "[" + getTimestamp() + "][PID:" + getProcessID() + "][TID:" + getThreadID() + "][Kool Intelligence log][" + std::string(className)
+            + "][" + logLevelToString(level) + "]: " + std::string(message);
 
         std::clog << output << std::endl;
         if (m_logFileStream.is_open()) {
