@@ -57,6 +57,8 @@ public:
 
     // Method to generate an image
     std::string generation_with_image(const std::string &prompt, const std::string &image_path);
+
+    std::string transcription_service();
 };
 
 #endif // MODEL_API_HPP

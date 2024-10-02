@@ -179,3 +179,34 @@ std::string model_api::generation_with_image(const std::string &prompt, const st
     ollama::response response = ollama::generate(model, prompt, options, image);
     return response.as_simple_string(); // Return the response as a string
 }
+
+std::string model_api::transcription_service()
+{      
+    std::string whisper_cpp_path = "../../src/model_backend/thirdparty/whisper.cpp";
+    std::string model_name = "ggml-small.en.bin";
+    std::string needed_file = "/model/"+model_name;
+    std::string model_name_in_repo = "small.en";
+    std::string model_download_script_path = "/models/download-ggml-model.sh";
+    // Check if the file exists using std::filesystem
+    if (!std::filesystem::exists(whisper_cpp_path+needed_file)) {
+        std::cout << "File not found, running installation script..." << std::endl;
+        
+        // Unix-based system (Linux, macOS, etc.)
+        LOG_ERROR("model_api",(whisper_cpp_path+model_download_script_path+" "+model_name_in_repo).c_str());
+        int ret = system((whisper_cpp_path+model_download_script_path+" "+model_name_in_repo).c_str());
+
+        // Check the result of the script execution
+        if (ret != 0) {
+            LOG_ERROR("model_api","Failed to run the installation script.");
+            return "error"; 
+        }
+    }
+
+    // Proceed with the transcription command after checking the file
+    LOG_ERROR("model_api",whisper_cpp_path + "/bin/stream -m "+whisper_cpp_path+ "/models/ggml-small.en.bin --step 1700 --length 5000 --keep 1000 ");
+    std::string transcription_service_cmd = "./stream_bin -m "+whisper_cpp_path+ "/models/ggml-small.en.bin --step 1700 --length 5000 --keep 1000 ";
+    
+    return model_api::exec_command(transcription_service_cmd);
+
+}
+
