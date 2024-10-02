@@ -1,6 +1,12 @@
 # KoolIntelligence
 Intelligent ML assistant for KDE
 
+> [!NOTE]
+> Make sure to clone the repository with the `--recursive` flag to get all the submodules.
+> ```bash
+> git clone --recursive https://github.com/Amaan1234567/KoolIntelligence
+> ```  
+
 ## Building
 
 See [Build instructions](docs/BuildInstructions.md)
