@@ -3,7 +3,17 @@ set(CMAKE_CUDA_HOST_COMPILER "/home/linuxbrew/.linuxbrew/bin/gcc-12")
 set(BUILD_SHARED_LIBS OFF)
 # set(WHISPER_OPENVINO ON)
 set(GGML_CUDA ON)
-add_subdirectory(whisper.cpp)
+
+find_package(SDL2 REQUIRED)
+message(STATUS "SDL2_INCLUDE_DIRS = ${SDL2_INCLUDE_DIRS}")
+message(STATUS "SDL2_LIBRARIES    = ${SDL2_LIBRARIES}")
+
 target_include_directories(koolintelligence PUBLIC whisper.cpp/include)
 target_include_directories(koolintelligence PUBLIC whisper.cpp/spm-headers)
+target_include_directories(koolintelligence PUBLIC whisper.cpp/examples)
+target_include_directories(koolintelligence PUBLIC  ${SDL2_INCLUDE_DIRS})
+target_sources(koolintelligence PRIVATE whisper.cpp/examples/common-sdl.cpp whisper.cpp/examples/common.cpp)
+# target_compile_definitions(koolintelligence PRIVATE _MSC_VER=0) #hack
+add_subdirectory(whisper.cpp)
+target_link_libraries     (koolintelligence PRIVATE SDL2)
 target_link_libraries(koolintelligence PRIVATE whisper)

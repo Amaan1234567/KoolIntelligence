@@ -50,5 +50,3 @@ class transcribe_service
     int run(std::vector<std::string> argv = std::vector<std::string>());
 
 };
-
-#include "transcribe_service.cpp"
