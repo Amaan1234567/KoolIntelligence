@@ -1,3 +1,4 @@
+set(CMAKE_CUDA_COMPILER /usr/local/cuda/bin/nvcc)
 set(CMAKE_CUDA_HOST_COMPILER "/home/linuxbrew/.linuxbrew/bin/gcc-12")
 set(BUILD_SHARED_LIBS OFF)
 # set(WHISPER_OPENVINO ON)
