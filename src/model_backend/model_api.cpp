@@ -1,6 +1,6 @@
 #include "model_api.hpp"
 #include "logging.hpp"
-#include "whisper.h"
+#include "transcribe_service.hpp"
 
 // Function to execute a command and get the output
 std::string model_api::exec_command(const std::string &command)
@@ -207,7 +207,9 @@ std::string model_api::transcription_service()
     LOG_ERROR("model_api",whisper_cpp_path + "/bin/stream -m "+whisper_cpp_path+ "/models/ggml-small.en.bin --step 1700 --length 5000 --keep 1000 ");
     std::string transcription_service_cmd = "./stream_bin -m "+whisper_cpp_path+ "/models/ggml-small.en.bin --step 1700 --length 5000 --keep 1000 ";
     
-    return model_api::exec_command(transcription_service_cmd);
+    transcribe_service* service = new transcribe_service();
+    service->run();
+    return "";
 
 }
 
