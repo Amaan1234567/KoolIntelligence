@@ -1,4 +1,3 @@
-#pragma once
 #include "transcribe_service.hpp"
 
 bool transcribe_service::whisper_params_parse(std::vector<std::string> argv, whisper_params & params) {
@@ -289,7 +288,8 @@ int transcribe_service::run(std::vector<std::string> argv)
                         const int64_t t0 = whisper_full_get_segment_t0(ctx, i);
                         const int64_t t1 = whisper_full_get_segment_t1(ctx, i);
 
-                        std::string output = "[" + to_timestamp(t0, false) + " --> " + to_timestamp(t1, false) + "]  " + text;
+                        // std::string output = "[" + to_timestamp(t0, false) + " --> " + to_timestamp(t1, false) + "]  " + text;
+                        std::string output = text;
 
                         if (whisper_full_get_segment_speaker_turn_next(ctx, i)) {
                             output += " [SPEAKER_TURN]";
