@@ -73,7 +73,6 @@ void Logger::log(LogLevel level, std::string_view className, std::string_view me
 
 Logger::Logger()
 {
-    std::cout << sizeof(LOG_FILE) << std::endl;
     if (sizeof(LOG_FILE) && !m_logFileStream.is_open()) {
         fs::path logPath(LOG_FILE);
         m_logFileStream.open(logPath, std::ios::app);
