@@ -38,7 +38,7 @@ App::App(int argc, char *argv[])
     LOG_INFO("App", "Finished loading QApplication and QQuickStyle");
     this->engine = new QQmlApplicationEngine();
     this->chatHistoryModel = new ChatHistoryModel();
-    this->model_api_instance = new model_api();
+    this->model_api_instance = new ModelApi();
     this->userPromptField = new UserPromptField();
     this->userPromptField->setApp((void *)this);
     registerInstance(this->chatHistoryModel, "ChatHistoryModel");
@@ -49,7 +49,7 @@ App::App(int argc, char *argv[])
 
 int App::run()
 {
-    LOG_INFO("app",this->model_api_instance->transcription_service());
+    LOG_INFO("app", this->model_api_instance->TranscriptionService());
     if (this->engine->rootObjects().isEmpty()) {
         return -1;
     }
@@ -71,7 +71,7 @@ void App::userPrompt(const QString &text)
 {
     LOG_DEBUG("App", "User Prompt: " + text.toStdString());
     this->chatHistoryModel->addChatMessage(text, QString::fromStdString(this->user_name), QString::fromStdString(getTimestamp()), true);
-    std::string message = this->model_api_instance->get_response(text.toStdString());
+    std::string message = this->model_api_instance->GetResponse(text.toStdString());
     LOG_DEBUG("App", "Model Response: " + message);
     this->chatHistoryModel->addChatMessage(QString::fromStdString(message),
                                            QString::fromStdString("Kool Intelligence"),
