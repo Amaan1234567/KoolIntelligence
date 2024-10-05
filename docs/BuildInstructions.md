@@ -40,10 +40,14 @@ Please refer to the link for more information.
 # Build and Install the UI
 
 Run the following commands to build and install the UI:
+
+> [!NOTE]
+> Please ensure that the application is installed at /usr/bin/koolintelligence. If you have installed it at a different location, please uninstall it, and then reinstall it at the desired location. Otherwise the screenshot functionally will not work.
+
 ```bash
 cmake -B build/
 cmake --build build/
-cmake --install build/ --prefix "$HOME/.local"
+sudo cmake --install build/ #by default installs to /usr/bin, needed for screenshot functionality
 ```
 
 # Running the UI
@@ -56,5 +60,5 @@ koolintelligence
 # Uninstalling the UI
 
 ```bash
-cmake --build build/ --target uninstall
+sudo cmake --build build/ --target uninstall
 ```

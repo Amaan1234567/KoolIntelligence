@@ -6,11 +6,13 @@ include(ECMQmlModule)
 
 find_package(Qt6 REQUIRED COMPONENTS
     Core
+    Concurrent
     Quick
     Test
     Gui
     QuickControls2
     Widgets
+    DBus
 )
 
 find_package(KF6 REQUIRED COMPONENTS
@@ -53,6 +55,8 @@ target_link_libraries(koolintelligence
     Qt6::Gui
     Qt6::QuickControls2
     Qt6::Widgets
+    Qt6::DBus
+    Qt6::Concurrent
     KF6::I18n
     KF6::CoreAddons
     KF6::IconThemes

@@ -1,7 +1,8 @@
 [Desktop Entry]
 Name=Kool Intelligence
-Exec=koolintelligence
+Exec=/usr/bin/koolintelligence
 Icon=kde
 Type=Application
 Terminal=false
 Categories=System
+X-KDE-DBUS-Restricted-Interfaces=org.kde.KWin.ScreenShot2
