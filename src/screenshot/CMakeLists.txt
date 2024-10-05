@@ -1,0 +1,2 @@
+target_sources(koolintelligence PRIVATE KwinScreenshot.cpp)
+target_include_directories(koolintelligence PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

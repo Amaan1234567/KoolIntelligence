@@ -29,6 +29,7 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 add_subdirectory(src/ui)
 add_subdirectory(src/common)
 add_subdirectory(src/model_backend)
+add_subdirectory(src/screenshot)
 
 include(KDEClangFormat)
 file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.hpp *.c)
