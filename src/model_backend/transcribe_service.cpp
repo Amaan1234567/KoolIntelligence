@@ -1,6 +1,9 @@
 #include "transcribe_service.hpp"
 
-bool TranscribeService::whisper_params_parse(std::vector<std::string> argv, whisper_params &params)
+
+//NOTE: DONOT MESS WITH ANY VARIABLES HERE THAT DONT FOLLOW STYLE GUIDELINES THEY ARE VARIABLES USED INTERNALLY
+// IN WHISPER.CPP, THEY CHANGE, AND IT WILL DEFINITELY BREAK SOMETHING
+bool TranscribeService::whisperParamsParse(std::vector<std::string> argv, WhisperParams &params)
 {
     for (size_t i = 1; i < argv.size(); i++) {
         std::string arg = argv[i];
@@ -63,10 +66,10 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 {
     std::string transcript = "";
 
-    whisper_params params;
+    WhisperParams params;
     if (argv.size() == 0) {
         LOG_DEBUG("TranscribeService", "found no arguments specifically set, using defaults");
-    } else if (whisper_params_parse(argv, params) == false) {
+    } else if (whisperParamsParse(argv, params) == false) {
         LOG_ERROR("TranscribeService", "couldnt parse arguments :(");
         return "";
     }
@@ -303,7 +306,7 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 
                         std::string output = text;
 
-                        if (this->timeout_checker(output, params)) {
+                        if (this->timeoutChecker(output, params)) {
                             audio.pause();
 
                             whisper_print_timings(ctx);
@@ -318,7 +321,7 @@ std::string TranscribeService::run(std::vector<std::string> argv)
                         // std::string output = "[" + to_timestamp(t0, false) + " --> " + to_timestamp(t1, false) + "]  " + text;
                         std::string output = text;
 
-                        if (this->timeout_checker(output, params)) {
+                        if (this->timeoutChecker(output, params)) {
                             audio.pause();
 
                             whisper_print_timings(ctx);
@@ -382,27 +385,27 @@ std::string TranscribeService::run(std::vector<std::string> argv)
     return transcript;
 }
 
-bool TranscribeService::timeout_checker(std::string &output, whisper_params &params)
+bool TranscribeService::timeoutChecker(std::string &output, WhisperParams &params)
 {
     // first silence
     LOG_DEBUG("TranscribeService", "inside timeout_checker: " + output);
     LOG_DEBUG("TranscribeService", "inside timeout_checker: " + std::to_string(output.compare(" [BLANK_AUDIO]")));
 
-    if (output.compare(" [BLANK_AUDIO]") == 0 && !this->silence_start) {
+    if (output.compare(" [BLANK_AUDIO]") == 0 && !this->silenceStart) {
         LOG_DEBUG("TranscribeService", "inside timeout_checker: silence started");
         this->beg = std::chrono::high_resolution_clock::now();
-        this->silence_start = true;
+        this->silenceStart = true;
 
-    } else if (output.compare(" [BLANK_AUDIO]") == 0 && this->silence_start) // check for timeout
+    } else if (output.compare(" [BLANK_AUDIO]") == 0 && this->silenceStart) // check for timeout
     {
         auto end = std::chrono::high_resolution_clock::now();
-        if (std::chrono::duration_cast<std::chrono::seconds>(end - beg).count() >= params.TimeoutDuration) {
+        if (std::chrono::duration_cast<std::chrono::seconds>(end - beg).count() >= params.timeoutDuration) {
             LOG_INFO("TranscribeService", "Transcription timed out due to silence");
             LOG_DEBUG("TranscribeService", "inside timeout_checker: silence timeout initiated");
             return true;
         }
     } else if (output.compare(" [BLANK_AUDIO]") != 0) {
-        this->silence_start = false;
+        this->silenceStart = false;
         LOG_DEBUG("TranscribeService", "inside timeout_checker: silence reset");
     }
 
