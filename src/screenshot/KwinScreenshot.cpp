@@ -7,14 +7,14 @@ Also with help from Vlad Zahorodnii(vlad.zahorodnii@kde.org), Aleix Pol(aleixpol
 Note: This code is licensed under LGPL-2.0-or-later as per the original codebase
 */
 
-#include <QtDBus/QtDBus>
+#include "logging.hpp"
 #include <QDBusUnixFileDescriptor>
 #include <QImage>
 #include <QtConcurrentRun>
-#include <qplatformdefs.h>
-#include "logging.hpp"
+#include <QtDBus/QtDBus>
 #include <fcntl.h>
 #include <poll.h>
+#include <qplatformdefs.h>
 #include <unistd.h>
 
 static const QString screenShotService = QString().fromStdString("org.kde.KWin.ScreenShot2");
@@ -103,8 +103,9 @@ static QImage readImage(int pipeFd, const QVariantMap &metadata)
     return result;
 }
 
-QFuture<QImage> kwinScreenshotConnect(){
-  int pipeFds[2];
+QFuture<QImage> kwinScreenshotConnect()
+{
+    int pipeFds[2];
     if (pipe2(pipeFds, O_CLOEXEC | O_NONBLOCK) != 0) {
         LOG_ERROR("takeScreenshotKwin", "Failed to create pipe");
     }
@@ -135,7 +136,8 @@ QFuture<QImage> kwinScreenshotConnect(){
     return QtConcurrent::run(readImage, pipeFds[0], reply);
 }
 
-void takeScreenshotKwin(std::string path) {
+void takeScreenshotKwin(std::string path)
+{
     QFuture<QImage> future = kwinScreenshotConnect();
     if (!future.isStarted()) {
         return;

@@ -17,7 +17,7 @@ private:
     QApplication *app;
     QQmlApplicationEngine *engine;
     ChatHistoryModel *chatHistoryModel;
-    model_api *model_api_instance;
+    ModelApi *model_api_instance;
     UserPromptField *userPromptField;
     std::string user_name;
 };
