@@ -12,9 +12,11 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <cstdlib> 
 
 // command-line parameters
-struct whisper_params {
+struct WhisperParams {
+    //do not fuck with the names of these params thinking it dosent follow style, these have to be as it is, dependency of whisper.cpp
     int32_t n_threads = std::min(4, (int32_t)std::thread::hardware_concurrency());
     int32_t step_ms = 1200;
     int32_t length_ms = 5000;
@@ -37,20 +39,19 @@ struct whisper_params {
     bool flash_attn = true;
 
     std::string language = "en";
-    std::string model = "../../src/model_backend/thirdparty/whisper.cpp/models/ggml-small.en.bin";
-    std::string fname_out = "../../src/model_backend/thirdparty/whisper.cpp/samples/output_from_koointelligence.wav";
-
-    int TimeoutDuration = 5;
+    std::string model = std::string(getenv("HOME"))+"/ggml-small.en.bin";
+    std::string fname_out;
+    int timeoutDuration = 5;
 };
 
 class TranscribeService
 {
-    bool whisper_params_parse(std::vector<std::string> argv, whisper_params &params);
+    bool whisperParamsParse(std::vector<std::string> argv, WhisperParams &params);
 
-    bool timeout_checker(std::string &output, whisper_params &params);
+    bool timeoutChecker(std::string &output, WhisperParams &params);
 
     std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
-    bool silence_start = false;
+    bool silenceStart = false;
 
 public:
     std::string run(std::vector<std::string> argv = std::vector<std::string>());
