@@ -5,36 +5,40 @@ Intelligent ML assistant for KDE
 
 See [Build instructions](docs/BuildInstructions.md)
 
-## Formatting
+## CI/CD pipeline
+See [CI/CD pipeline](docs/CIIntegration.md) to understand how the CI/CD pipeline works.
 
-Install clang-format.
-Then configure cmake using
+## Coding Guidelines
+
+See [Coding Guidelines](docs/codingGuidelines.md) to understand the coding guidelines.
+
+## Note regarding logging
+
+Logs are print statements that we use. We do not use print statements. Only logs are allowed. 
+This is so that we can easily turn off logs when we are done debugging and only have certain logs depending on the severity. This helps in debugging and also in the performance of the application.
+
+There are 5 levels of logs:
+1. DEBUG
+2. INFO
+3. WARNING
+4. ERROR
+5. CRITICAL
+
+The levels are in increasing order of severity. So, if we set the log level to INFO, then all logs of level INFO and above will be printed. If we set the log level to WARNING, then all logs of level WARNING and above will be printed. And so on.
+
+To set the log level, when configuring cmake, use the appropriate flag. For example, to set the log level to INFO, use the following flag:
 ```
-cmake -B build
+cmake -DLOG_LEVEL_INFO=ON -B build
 ```
 
-Then run the following command to format the code
-```
-cd build
-make clang-format
-```
-
-If you are using ninja(-GNinja), then run the following command
-```
-cd build
-ninja clang-format
-```
-
-## Style guidelines
-
-Follow KDE style guidelines which can be found at this [link](https://community.kde.org/Policies/Frameworks_Coding_Style)
-
-As a summary of important things:
+similarly, for other log levels the flags are:
 
 
-### Variable declaration
-* Each variable should be declared on a new line
-* Each new word in a variable name starts with a capital letter (so-called camelCase)
-* Avoid abbreviations
-* Use indicative/useful names. No short names
-* Variables and functions start with a lowercase letter
+* DEBUG: -DLOG_LEVEL_DEBUG=ON
+* INFO: -DLOG_LEVEL_INFO=ON
+* WARNING: -DLOG_LEVEL_WARNING=ON
+* ERROR: -DLOG_LEVEL_ERROR=ON
+* CRITICAL: -DLOG_LEVEL_CRITICAL=ON
+
+*
+

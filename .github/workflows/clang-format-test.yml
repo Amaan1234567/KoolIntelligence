@@ -1,0 +1,19 @@
+name: clang-format Check
+on:
+  pull_request:
+    branches: ["*", "**"]
+
+jobs:
+  clang-format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install clang-format
+      run: sudo apt-get install -y clang-format
+
+    - name: Run clang-format
+      run: |
+        SOURCE_DIR="src" && find "$SOURCE_DIR" -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.tpp" \) | while read -r FILENAME; do clang-format -in "$FILENAME"; done

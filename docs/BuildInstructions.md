@@ -10,25 +10,25 @@ Run the below command relevant to your distribution.
 
 ## Arch:
 ```bash
-sudo pacman -S base-devel extra-cmake-modules cmake kirigami ki18n kcoreaddons breeze kiconthemes qt6-base qt6-declarative qqc2-desktop-style
+sudo pacman -S base-devel extra-cmake-modules cmake kirigami ki18n kcoreaddons breeze kiconthemes qt6-base qt6-declarative qqc2-desktop-style sdl2
 ```
 
 ## OpenSUSE:
 ```bash
-sudo zypper install cmake kf6-extra-cmake-modules kf6-kirigami-devel kf6-ki18n-devel kf6-kcoreaddons-devel kf6-kiconthemes-devel qt6-base-devel qt6-declarative-devel qt6-quickcontrols2-devel kf6-qqc2-desktop-style
+sudo zypper install cmake kf6-extra-cmake-modules kf6-kirigami-devel kf6-ki18n-devel kf6-kcoreaddons-devel kf6-kiconthemes-devel qt6-base-devel qt6-declarative-devel qt6-quickcontrols2-devel kf6-qqc2-desktop-style SDL2-devel
 ```
 
 ## Fedora:
 ```bash
 sudo dnf groupinstall "Development Tools" "Development Libraries"
-sudo dnf install cmake extra-cmake-modules kf6-kirigami2-devel kf6-ki18n-devel kf6-kcoreaddons-devel kf6-kiconthemes-devel qt6-qtbase-devel qt6-qtdeclarative-devel qt6-qtquickcontrols2-devel kf6-qqc2-desktop-style
+sudo dnf install cmake extra-cmake-modules kf6-kirigami2-devel kf6-ki18n-devel kf6-kcoreaddons-devel kf6-kiconthemes-devel qt6-qtbase-devel qt6-qtdeclarative-devel qt6-qtquickcontrols2-devel kf6-qqc2-desktop-style SDL2-devel
 ```
 
 ## Ubuntu: (DOES NOT WORK)
 
 Note: This will not work as kubuntu has still not packaged KDE 6. Till then this is pointless and just there for my(Rahul) reference
 ```bash
-sudo apt install kirigami2-dev qml-module-org-kde-i18n-localedata qt6-base-dev libkf5iconthemes-dev qtdeclarative5-dev libkf5i18n-dev qtquickcontrols2-5-dev qml-module-org-kde-qqc2desktopstyle libkf5coreaddons-dev
+sudo apt install kirigami2-dev qml-module-org-kde-i18n-localedata qt6-base-dev libkf5iconthemes-dev qtdeclarative5-dev libkf5i18n-dev qtquickcontrols2-5-dev qml-module-org-kde-qqc2desktopstyle libkf5coreaddons-dev libsdl2-dev
 ```
 ## For other distributions:
 

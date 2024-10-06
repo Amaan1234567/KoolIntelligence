@@ -1,0 +1,15 @@
+name: Check branch name
+
+on:
+  pull_request:
+    branches: ["*", "**"]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Branch name
+      uses: finleyfamily/action-enforce-branch-name@v1.0.1
+      with:
+        allowed_prefixes: >-
+          pr
