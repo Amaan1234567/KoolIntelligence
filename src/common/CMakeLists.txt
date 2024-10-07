@@ -6,9 +6,9 @@ set(CRITICAL 4)
 set(LOG_LEVEL ${INFO})  # INFO level by default
 
 option(LOG_LEVEL_DEBUG "Show warning + error + info + debug messages" OFF)
-option(LOG_LEVEL_INFO "Show warning + error + info messages" OFF)
+option(LOG_LEVEL_INFO "Show warning + error + info messages" ON)
 option(LOG_LEVEL_WARNING "Show warrning + error messages" OFF)
-option(LOG_LEVEL_ERROR "Show error messages" ON)
+option(LOG_LEVEL_ERROR "Show error messages" OFF)
 
 if(LOG_LEVEL_DEBUG)
     set(LOG_LEVEL ${DEBUG})
@@ -24,7 +24,7 @@ elseif(LOG_LEVEL_ERROR)
     message(STATUS "Log level: ERROR")
 endif()
 
-set(LOG_FILE "\"logs.log\"")
+set(LOG_FILE "\"$ENV{HOME}/koolintelligence/logs/logs.log\"")
 message(STATUS "Log file: ${LOG_FILE}")
 target_include_directories(koolintelligence PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_sources(koolintelligence PRIVATE logging.cpp)

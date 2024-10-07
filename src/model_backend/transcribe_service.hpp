@@ -34,12 +34,12 @@ struct WhisperParams {
     bool no_context = true;
     bool no_timestamps = false;
     bool tinydiarize = false;
-    bool save_audio = true; // save audio to wav file
+    bool save_audio = false; // save audio to wav file
     bool use_gpu = true;
     bool flash_attn = true;
 
     std::string language = "en";
-    std::string model = std::string(getenv("HOME"))+"/ggml-small.en.bin";
+    std::string model = std::string(getenv("HOME"))+"/koolintelligence/models/ggml-small.en.bin";
     std::string fname_out;
     int timeoutDuration = 5;
 };
