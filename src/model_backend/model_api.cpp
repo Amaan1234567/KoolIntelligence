@@ -107,7 +107,6 @@ void ModelApi::startOllama()
     LOG_INFO("ModelApi", "Starting Ollama server...");
     this->ollamaPid = fork(); // Fork a new process
     
-    std::cout<< std::to_string(this->ollamaPid) << std::endl;
     if (this->ollamaPid == 0) {
         // Child process: run the Ollama server
         execlp("ollama", "ollama", "serve", nullptr);
@@ -123,7 +122,6 @@ void ModelApi::stopOllama()
     if (this->ollamaPid > 0) {
         LOG_INFO("ModelApi", "Stopping Ollama server...");
         LOG_INFO("ModelApi", "ollama pid: "+std::to_string(this->ollamaPid));
-        std::cout<< std::to_string(this->ollamaPid) << std::endl;
         
         kill(this->ollamaPid, 9); // Stop the server process
         this->ollamaPid = 0;
