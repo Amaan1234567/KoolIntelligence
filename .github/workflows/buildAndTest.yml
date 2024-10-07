@@ -1,0 +1,156 @@
+name: Build and Test Kool Intelligence
+
+on:
+  push:
+    branches: [ "*", "**"]
+
+  pull_request:
+    branches: ["*", "**"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Dependencies
+      run: |
+        sudo apt update
+        sudo apt install build-essential cmake ninja-build gettext gperf *wayland* libsdl2-dev --fix-missing
+
+    - name: Install CUDA
+      uses: Jimver/cuda-toolkit@v0.2.17
+      id: cuda-toolkit
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        aqtversion: '==3.1.*'
+        version: '6.7.*'
+        host: 'linux'
+        target: 'desktop'
+        arch: 'linux_gcc_64'
+        modules: 'qtshadertools qtwaylandcompositor'
+
+    - name: Build ECM
+      run: |
+        git clone https://github.com/KDE/extra-cmake-modules.git
+        cmake -S extra-cmake-modules -B extra-cmake-modules/build -GNinja 
+        cmake --build extra-cmake-modules/build --parallel
+        sudo cmake --install extra-cmake-modules/build
+
+    - name: Build kirigami
+      run: |
+        git clone https://github.com/KDE/kirigami.git
+        cmake -S kirigami -B kirigami/build -GNinja 
+        cmake --build kirigami/build --parallel
+        sudo cmake --install kirigami/build
+
+    - name: Build kcoreaddons
+      run: |
+        git clone https://github.com/KDE/kcoreaddons.git
+        cmake -S kcoreaddons -B kcoreaddons/build -GNinja 
+        cmake --build kcoreaddons/build --parallel
+        sudo cmake --install kcoreaddons/build
+
+    - name: Build ki18n
+      run: |
+        git clone https://github.com/KDE/ki18n.git
+        cmake -S ki18n -B ki18n/build -GNinja 
+        cmake --build ki18n/build --parallel
+        sudo cmake --install ki18n/build
+
+    - name: Build kconfig
+      run: |
+        git clone https://github.com/KDE/kconfig.git
+        cmake -S kconfig -B kconfig/build -GNinja 
+        cmake --build kconfig/build --parallel
+        sudo cmake --install kconfig/build
+
+    - name: Build qqc2-desktop-style
+      run: |
+        git clone https://github.com/KDE/qqc2-desktop-style.git
+        cmake -S qqc2-desktop-style -B qqc2-desktop-style/build -GNinja 
+        cmake --build qqc2-desktop-style/build --parallel
+        sudo cmake --install qqc2-desktop-style/build
+
+    - name: Build karchive
+      run: |
+        git clone https://github.com/KDE/karchive.git
+        cmake -S karchive -B karchive/build -GNinja 
+        cmake --build karchive/build --parallel
+        sudo cmake --install karchive/build
+
+    - name: Build kcodecs
+      run: |
+        git clone https://github.com/KDE/kcodecs.git
+        cmake -S kcodecs -B kcodecs/build -GNinja 
+        cmake --build kcodecs/build --parallel
+        sudo cmake --install kcodecs/build
+
+    - name: Build plasma-wayland-protocols
+      run: |
+        git clone https://github.com/KDE/plasma-wayland-protocols.git
+        cmake -S plasma-wayland-protocols -B plasma-wayland-protocols/build -GNinja 
+        cmake --build plasma-wayland-protocols/build --parallel
+        sudo cmake --install plasma-wayland-protocols/build
+    
+    - name: Build kguiaddons
+      run: |
+        git clone https://github.com/KDE/kguiaddons.git
+        cmake -S kguiaddons -B kguiaddons/build -GNinja 
+        cmake --build kguiaddons/build --parallel
+        sudo cmake --install kguiaddons/build
+    
+    - name: Build kwidgetsaddons
+      run: |
+        git clone https://github.com/KDE/kwidgetsaddons.git
+        cmake -S kwidgetsaddons -B kwidgetsaddons/build -GNinja 
+        cmake --build kwidgetsaddons/build --parallel
+        sudo cmake --install kwidgetsaddons/build
+    
+    - name: Build kcolorscheme
+      run: |
+        git clone https://github.com/KDE/kcolorscheme.git
+        cmake -S kcolorscheme -B kcolorscheme/build -GNinja 
+        cmake --build kcolorscheme/build --parallel
+        sudo cmake --install kcolorscheme/build
+    
+    - name: Build kconfigwidgets
+      run: |
+        git clone https://github.com/KDE/kconfigwidgets.git
+        cmake -S kconfigwidgets -B kconfigwidgets/build -GNinja 
+        cmake --build kconfigwidgets/build --parallel
+        sudo cmake --install kconfigwidgets/build
+    
+    - name: Build breeze-icons
+      run: |
+        git clone https://github.com/KDE/breeze-icons.git
+        cmake -S breeze-icons -B breeze-icons/build -GNinja 
+        cmake --build breeze-icons/build --parallel
+        sudo cmake --install breeze-icons/build
+    
+    - name: Build kiconstheme
+      run: |
+        git clone https://github.com/KDE/kiconthemes.git
+        cmake -S kiconthemes -B kiconthemes/build -GNinja 
+        cmake --build kiconthemes/build --parallel
+        sudo cmake --install kiconthemes/build
+    
+    - name: Configure Repo
+      run: |
+        git submodule init
+        git submodule update
+
+    - name: Configure CMake
+      run: cmake -B build -GNinja
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Install
+      run: sudo cmake --install build/
+    
+    # - name: Test
+    #     working-directory: ${{github.workspace}}/build
+    #     run: ctest
