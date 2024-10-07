@@ -16,12 +16,14 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install build-essential cmake ninja-build gettext gperf *wayland* --fix-missing
-    # - name: Install Qt
-    #   run: |
-    #     curl -L -O https://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
-    #     chmod u+x qt-unified-linux-x64-online.run
-    #     ./qt-unified-linux-x64-online.run --accept-licenses --default-answer --confirm-command install qt.qt6.680.linux_gcc_64
+        sudo apt install build-essential cmake ninja-build gettext gperf *wayland* libsdl2-dev --fix-missing
+
+    - name: Install CUDA
+      uses: Jimver/cuda-toolkit@v0.2.17
+      id: cuda-toolkit
+      with:
+        cuda: '12.5.0'
+
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
@@ -137,10 +139,10 @@ jobs:
         cmake --build kiconthemes/build --parallel
         sudo cmake --install kiconthemes/build
     
-    # - name: Configure Repo
-    #   run: |
-    #     git submodule init
-    #     git submodule update
+    - name: Configure Repo
+      run: |
+        git submodule init
+        git submodule update
 
     - name: Configure CMake
       run: cmake -B build -GNinja
