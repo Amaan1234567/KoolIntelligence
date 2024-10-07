@@ -24,7 +24,7 @@ elseif(LOG_LEVEL_ERROR)
     message(STATUS "Log level: ERROR")
 endif()
 
-set(LOG_FILE "\"logs.log\"")
+set(LOG_FILE "\"$ENV{HOME}/koolintelligence/logs/logs.log\"")
 message(STATUS "Log file: ${LOG_FILE}")
 target_include_directories(koolintelligence PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_sources(koolintelligence PRIVATE logging.cpp)

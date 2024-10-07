@@ -22,7 +22,7 @@ get_script_path() {
     fi
 }
 
-models_path="/"
+models_path="koolintelligence/models"
 
 # Whisper models
 models="tiny
@@ -95,8 +95,8 @@ echo "$model" | grep -q '^"tdrz"*$'
 # download ggml model
 
 printf "Downloading ggml model %s from '%s' ...\n" "$model" "$src"
-
-cd  || exit
+cd ~ || exit
+cd $models_path || exit
 
 if [ -f "ggml-$model.bin" ]; then
     printf "Model %s already exists. Skipping download.\n" "$model"
