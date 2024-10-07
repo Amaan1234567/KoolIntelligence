@@ -38,6 +38,7 @@ bool ModelApi::doesFolderExist()
     return path.exists();
 }
 
+
 void ModelApi::mainFolderInit()
 {
     std::filesystem::create_directories(std::string(getenv("HOME"))+"/koolintelligence/models");
@@ -54,6 +55,8 @@ void ModelApi::mainFolderInit()
 
 }
 
+
+//main function which checks if the folder for our app is present in user's HOME directory
 void ModelApi::folderCheck()
 {
     if(ModelApi::doesFolderExist())
