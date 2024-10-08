@@ -1,7 +1,7 @@
 #include "transcribe_service.hpp"
 
-//NOTE: DONOT MESS WITH ANY VARIABLES HERE THAT DONT FOLLOW STYLE GUIDELINES THEY ARE VARIABLES USED INTERNALLY
-// IN WHISPER.CPP, THEY CHANGE, AND IT WILL DEFINITELY BREAK SOMETHING
+// NOTE: DONOT MESS WITH ANY VARIABLES HERE THAT DONT FOLLOW STYLE GUIDELINES THEY ARE VARIABLES USED INTERNALLY
+//  IN WHISPER.CPP, THEY CHANGE, AND IT WILL DEFINITELY BREAK SOMETHING
 bool TranscribeService::whisperParamsParse(std::vector<std::string> argv)
 {
     for (size_t i = 1; i < argv.size(); i++) {
@@ -137,7 +137,8 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 
         if (!use_vad) {
             LOG_INFO("TranscribeService",
-                     std::string(__func__) + ": n_new_line = " + std::to_string(n_new_line) + ", no_context = " + std::to_string(this->params.no_context) + "\n");
+                     std::string(__func__) + ": n_new_line = " + std::to_string(n_new_line) + ", no_context = " + std::to_string(this->params.no_context)
+                         + "\n");
         } else {
             LOG_INFO("TranscribeService", std::string(__func__) + ": using VAD, will transcribe on speech activity\n");
         }
