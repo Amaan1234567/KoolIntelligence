@@ -4,19 +4,21 @@
 #include "logging.hpp"
 #include "whisper.h"
 
+
 #include <cassert>
 #include <chrono>
 #include <cstdio>
+#include <cstdlib>
 #include <fstream>
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
-#include <cstdlib> 
 
 // command-line parameters
 struct WhisperParams {
-    //do not fuck with the names of these params thinking it dosent follow style, these have to be as it is, dependency of whisper.cpp
+    // do not fuck with the names of these params thinking it dosent follow style, these have to be as it is, dependency of whisper.cpp
     int32_t n_threads = std::min(4, (int32_t)std::thread::hardware_concurrency());
     int32_t step_ms = 1200;
     int32_t length_ms = 5000;
@@ -35,24 +37,38 @@ struct WhisperParams {
     bool no_timestamps = false;
     bool tinydiarize = false;
     bool save_audio = false; // save audio to wav file
-    bool use_gpu = true;
+    bool use_gpu = false;
     bool flash_attn = true;
 
     std::string language = "en";
-    std::string model = std::string(getenv("HOME"))+"/koolintelligence/models/ggml-small.en.bin";
+    std::string model = std::string(getenv("HOME")) + "/koolintelligence/models/ggml-small.en.bin";
     std::string fname_out;
     int timeoutDuration = 5;
 };
 
 class TranscribeService
 {
-    bool whisperParamsParse(std::vector<std::string> argv, WhisperParams &params);
-
-    bool timeoutChecker(std::string &output, WhisperParams &params);
-
-    std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
+    WhisperParams params;
     bool silenceStart = false;
 
+    
+
+    bool whisperParamsParse(std::vector<std::string> argv);
+
+    bool timeoutChecker(std::string &output);
+
+    std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
+
 public:
+
+    TranscribeService()
+    {
+        if(std::filesystem::exists("/usr/lib/libcuda.so"))
+        this->params.use_gpu = true;
+        else
+        this->params.use_gpu = false;
+        
+    }
+
     std::string run(std::vector<std::string> argv = std::vector<std::string>());
-};
+};  

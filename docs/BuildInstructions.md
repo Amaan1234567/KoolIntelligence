@@ -67,7 +67,13 @@ brew install gcc@12
 
 Make sure that the gcc-12 compiler is in your path.
 
-## Step 3optional: Install ccache
+## Step 4: Install OpenVino
+install openvino using brew with following command
+```bash
+/bin/bash brew install openvino
+```
+
+## Step 5(optional): Install ccache
 > [!WARNING] 
 > The whisper repo is very big and takes a long time to compile. To shorten the process of recompiling, it is highly reccomended to use ccache.
 
