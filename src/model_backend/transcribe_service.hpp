@@ -4,13 +4,12 @@
 #include "logging.hpp"
 #include "whisper.h"
 
-
 #include <cassert>
 #include <chrono>
 #include <cstdio>
 #include <cstdlib>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -51,8 +50,6 @@ class TranscribeService
     WhisperParams params;
     bool silenceStart = false;
 
-    
-
     bool whisperParamsParse(std::vector<std::string> argv);
 
     bool timeoutChecker(std::string &output);
@@ -60,15 +57,13 @@ class TranscribeService
     std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
 
 public:
-
     TranscribeService()
     {
-        if(std::filesystem::exists("/usr/lib/libcuda.so"))
-        this->params.use_gpu = true;
+        if (std::filesystem::exists("/usr/lib/libcuda.so"))
+            this->params.use_gpu = true;
         else
-        this->params.use_gpu = false;
-        
+            this->params.use_gpu = false;
     }
 
     std::string run(std::vector<std::string> argv = std::vector<std::string>());
-};  
+};
