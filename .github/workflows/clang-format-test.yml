@@ -21,7 +21,7 @@ jobs:
         find "$SOURCE_DIR" -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.tpp" \) | while read -r FILENAME; do
           if ! clang-format -output-replacements-xml "$FILENAME" | grep -q "<replacement "; then
             echo "$FILENAME is not formatted correctly"
-            FORMAT_ERRORS=1
+            FORMAT_ERRORS=-1
           fi
         done
         exit $FORMAT_ERRORS
