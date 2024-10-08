@@ -4,7 +4,8 @@
 #include "userPromptField.hpp"
 #include <QApplication>
 #include <QQmlApplicationEngine>
-class App{
+class App
+{
 public:
     App(int argc, char *argv[]);
     int run();
