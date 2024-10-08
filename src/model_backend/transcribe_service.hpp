@@ -8,6 +8,7 @@
 #include <chrono>
 #include <cstdio>
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -35,7 +36,7 @@ struct WhisperParams {
     bool no_timestamps = false;
     bool tinydiarize = false;
     bool save_audio = false; // save audio to wav file
-    bool use_gpu = true;
+    bool use_gpu = false;
     bool flash_attn = true;
 
     std::string language = "en";
@@ -46,13 +47,23 @@ struct WhisperParams {
 
 class TranscribeService
 {
-    bool whisperParamsParse(std::vector<std::string> argv, WhisperParams &params);
-
-    bool timeoutChecker(std::string &output, WhisperParams &params);
-
-    std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
+    WhisperParams params;
     bool silenceStart = false;
 
+    bool whisperParamsParse(std::vector<std::string> argv);
+
+    bool timeoutChecker(std::string &output);
+
+    std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
+
 public:
+    TranscribeService()
+    {
+        if (std::filesystem::exists("/usr/lib/libcuda.so"))
+            this->params.use_gpu = true;
+        else
+            this->params.use_gpu = false;
+    }
+
     std::string run(std::vector<std::string> argv = std::vector<std::string>());
 };

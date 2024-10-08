@@ -72,7 +72,13 @@ then add the following to your .bashrc or .zshrc to ensure that nvcc uses the co
 export NVCC_PREPEND_FLAGS='-ccbin /home/linuxbrew/.linuxbrew/bin/g++-12'
 ```
 
-## Step 3optional: Install ccache
+## Step 4: Install OpenVino
+install openvino using brew with following command
+```bash
+/bin/bash brew install openvino
+```
+
+## Step 5(optional): Install ccache
 > [!WARNING] 
 > The whisper repo is very big and takes a long time to compile. To shorten the process of recompiling, it is highly reccomended to use ccache.
 
