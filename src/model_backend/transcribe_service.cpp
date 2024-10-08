@@ -1,8 +1,8 @@
 #include "transcribe_service.hpp"
 
-// NOTE: DONOT MESS WITH ANY VARIABLES HERE THAT DONT FOLLOW STYLE GUIDELINES THEY ARE VARIABLES USED INTERNALLY
-//  IN WHISPER.CPP, THEY CHANGE, AND IT WILL DEFINITELY BREAK SOMETHING
-bool TranscribeService::whisperParamsParse(std::vector<std::string> argv, WhisperParams &params)
+//NOTE: DONOT MESS WITH ANY VARIABLES HERE THAT DONT FOLLOW STYLE GUIDELINES THEY ARE VARIABLES USED INTERNALLY
+// IN WHISPER.CPP, THEY CHANGE, AND IT WILL DEFINITELY BREAK SOMETHING
+bool TranscribeService::whisperParamsParse(std::vector<std::string> argv)
 {
     for (size_t i = 1; i < argv.size(); i++) {
         std::string arg = argv[i];
@@ -11,45 +11,45 @@ bool TranscribeService::whisperParamsParse(std::vector<std::string> argv, Whispe
             LOG_ERROR("TranscribeService", "wrong parameter names. please double check them");
             exit(0);
         } else if (arg == "-t" || arg == "--threads") {
-            params.n_threads = std::stoi(argv[++i]);
+            this->params.n_threads = std::stoi(argv[++i]);
         } else if (arg == "--step") {
-            params.step_ms = std::stoi(argv[++i]);
+            this->params.step_ms = std::stoi(argv[++i]);
         } else if (arg == "--length") {
-            params.length_ms = std::stoi(argv[++i]);
+            this->params.length_ms = std::stoi(argv[++i]);
         } else if (arg == "--keep") {
-            params.keep_ms = std::stoi(argv[++i]);
+            this->params.keep_ms = std::stoi(argv[++i]);
         } else if (arg == "-c" || arg == "--capture") {
-            params.capture_id = std::stoi(argv[++i]);
+            this->params.capture_id = std::stoi(argv[++i]);
         } else if (arg == "-mt" || arg == "--max-tokens") {
-            params.max_tokens = std::stoi(argv[++i]);
+            this->params.max_tokens = std::stoi(argv[++i]);
         } else if (arg == "-ac" || arg == "--audio-ctx") {
-            params.audio_ctx = std::stoi(argv[++i]);
+            this->params.audio_ctx = std::stoi(argv[++i]);
         } else if (arg == "-vth" || arg == "--vad-thold") {
-            params.vad_thold = std::stof(argv[++i]);
+            this->params.vad_thold = std::stof(argv[++i]);
         } else if (arg == "-fth" || arg == "--freq-thold") {
-            params.freq_thold = std::stof(argv[++i]);
+            this->params.freq_thold = std::stof(argv[++i]);
         } else if (arg == "-tr" || arg == "--translate") {
-            params.translate = true;
+            this->params.translate = true;
         } else if (arg == "-nf" || arg == "--no-fallback") {
-            params.no_fallback = true;
+            this->params.no_fallback = true;
         } else if (arg == "-ps" || arg == "--print-special") {
-            params.print_special = true;
+            this->params.print_special = true;
         } else if (arg == "-kc" || arg == "--keep-context") {
-            params.no_context = false;
+            this->params.no_context = false;
         } else if (arg == "-l" || arg == "--language") {
-            params.language = argv[++i];
+            this->params.language = argv[++i];
         } else if (arg == "-m" || arg == "--model") {
-            params.model = argv[++i];
+            this->params.model = argv[++i];
         } else if (arg == "-f" || arg == "--file") {
-            params.fname_out = argv[++i];
+            this->params.fname_out = argv[++i];
         } else if (arg == "-tdrz" || arg == "--tinydiarize") {
-            params.tinydiarize = true;
+            this->params.tinydiarize = true;
         } else if (arg == "-sa" || arg == "--save-audio") {
-            params.save_audio = true;
+            this->params.save_audio = true;
         } else if (arg == "-ng" || arg == "--no-gpu") {
-            params.use_gpu = false;
+            this->params.use_gpu = false;
         } else if (arg == "-fa" || arg == "--flash-attn") {
-            params.flash_attn = true;
+            this->params.flash_attn = true;
         }
 
         else {
@@ -65,34 +65,33 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 {
     std::string transcript = "";
 
-    WhisperParams params;
     if (argv.size() == 0) {
         LOG_DEBUG("TranscribeService", "found no arguments specifically set, using defaults");
-    } else if (whisperParamsParse(argv, params) == false) {
+    } else if (whisperParamsParse(argv) == false) {
         LOG_ERROR("TranscribeService", "couldnt parse arguments :(");
         return "";
     }
 
-    params.keep_ms = std::min(params.keep_ms, params.step_ms);
-    params.length_ms = std::max(params.length_ms, params.step_ms);
+    this->params.keep_ms = std::min(this->params.keep_ms, this->params.step_ms);
+    this->params.length_ms = std::max(this->params.length_ms, this->params.step_ms);
 
-    const int n_samples_step = (1e-3 * params.step_ms) * WHISPER_SAMPLE_RATE;
-    const int n_samples_len = (1e-3 * params.length_ms) * WHISPER_SAMPLE_RATE;
-    const int n_samples_keep = (1e-3 * params.keep_ms) * WHISPER_SAMPLE_RATE;
+    const int n_samples_step = (1e-3 * this->params.step_ms) * WHISPER_SAMPLE_RATE;
+    const int n_samples_len = (1e-3 * this->params.length_ms) * WHISPER_SAMPLE_RATE;
+    const int n_samples_keep = (1e-3 * this->params.keep_ms) * WHISPER_SAMPLE_RATE;
     const int n_samples_30s = (1e-3 * 30000.0) * WHISPER_SAMPLE_RATE;
 
     const bool use_vad = n_samples_step <= 0; // sliding window mode uses VAD
 
-    const int n_new_line = !use_vad ? std::max(1, params.length_ms / params.step_ms - 1) : 1; // number of steps to print new line
+    const int n_new_line = !use_vad ? std::max(1, this->params.length_ms / this->params.step_ms - 1) : 1; // number of steps to print new line
 
-    params.no_timestamps = !use_vad;
-    params.no_context |= use_vad;
-    params.max_tokens = 0;
+    this->params.no_timestamps = !use_vad;
+    this->params.no_context |= use_vad;
+    this->params.max_tokens = 0;
 
     // init audio
 
-    audio_async audio(params.length_ms);
-    if (!audio.init(params.capture_id, WHISPER_SAMPLE_RATE)) {
+    audio_async audio(this->params.length_ms);
+    if (!audio.init(this->params.capture_id, WHISPER_SAMPLE_RATE)) {
         LOG_ERROR("TranscribeService", std::string(__func__) + ": audio.init() failed!\n");
         return "";
     }
@@ -100,17 +99,17 @@ std::string TranscribeService::run(std::vector<std::string> argv)
     audio.resume();
 
     // whisper init
-    if (params.language != "auto" && whisper_lang_id(params.language.c_str()) == -1) {
-        LOG_ERROR("TranscribeService", ("error: unknown language " + params.language).c_str());
+    if (this->params.language != "auto" && whisper_lang_id(this->params.language.c_str()) == -1) {
+        LOG_ERROR("TranscribeService", ("error: unknown language " + this->params.language).c_str());
         return "";
     }
 
     struct whisper_context_params cparams = whisper_context_default_params();
 
-    cparams.use_gpu = params.use_gpu;
-    cparams.flash_attn = params.flash_attn;
+    cparams.use_gpu = this->params.use_gpu;
+    cparams.flash_attn = this->params.flash_attn;
 
-    struct whisper_context *ctx = whisper_init_from_file_with_params(params.model.c_str(), cparams);
+    struct whisper_context *ctx = whisper_init_from_file_with_params(this->params.model.c_str(), cparams);
 
     std::vector<float> pcmf32(n_samples_30s, 0.0f);
     std::vector<float> pcmf32_old;
@@ -122,9 +121,9 @@ std::string TranscribeService::run(std::vector<std::string> argv)
     {
         LOG_INFO("TranscribeService", "\n");
         if (!whisper_is_multilingual(ctx)) {
-            if (params.language != "en" || params.translate) {
-                params.language = "en";
-                params.translate = false;
+            if (this->params.language != "en" || this->params.translate) {
+                this->params.language = "en";
+                this->params.translate = false;
                 LOG_ERROR("TranscribeService", std::string(__func__) + ": WARNING: model is not multilingual, ignoring language and translation options\n");
             }
         }
@@ -132,13 +131,13 @@ std::string TranscribeService::run(std::vector<std::string> argv)
                  std::string(__func__) + ": processing " + std::to_string(n_samples_step)
                      + " samples (step = " + std::to_string(float(n_samples_step) / WHISPER_SAMPLE_RATE)
                      + " sec / len = " + std::to_string(float(n_samples_len) / WHISPER_SAMPLE_RATE)
-                     + " sec / keep = " + std::to_string(float(n_samples_keep) / WHISPER_SAMPLE_RATE) + " sec), " + std::to_string(params.n_threads)
-                     + " threads, lang = " + params.language + ", task = " + (params.translate ? "translate" : "transcribe")
-                     + ", timestamps = " + (params.no_timestamps ? "0" : "1") + " ...\n");
+                     + " sec / keep = " + std::to_string(float(n_samples_keep) / WHISPER_SAMPLE_RATE) + " sec), " + std::to_string(this->params.n_threads)
+                     + " threads, lang = " + this->params.language + ", task = " + (this->params.translate ? "translate" : "transcribe")
+                     + ", timestamps = " + (this->params.no_timestamps ? "0" : "1") + " ...\n");
 
         if (!use_vad) {
             LOG_INFO("TranscribeService",
-                     std::string(__func__) + ": n_new_line = " + std::to_string(n_new_line) + ", no_context = " + std::to_string(params.no_context) + "\n");
+                     std::string(__func__) + ": n_new_line = " + std::to_string(n_new_line) + ", no_context = " + std::to_string(this->params.no_context) + "\n");
         } else {
             LOG_INFO("TranscribeService", std::string(__func__) + ": using VAD, will transcribe on speech activity\n");
         }
@@ -151,17 +150,17 @@ std::string TranscribeService::run(std::vector<std::string> argv)
     bool is_running = true;
 
     std::ofstream fout;
-    if (params.fname_out.length() > 0) {
-        fout.open(params.fname_out);
+    if (this->params.fname_out.length() > 0) {
+        fout.open(this->params.fname_out);
         if (!fout.is_open()) {
-            LOG_ERROR("TranscribeService", std::string(__func__) + ": failed to open output file \'" + params.fname_out + "\'!\n");
+            LOG_ERROR("TranscribeService", std::string(__func__) + ": failed to open output file \'" + this->params.fname_out + "\'!\n");
             return "";
         }
     }
 
     wav_writer wavWriter;
     // save wav file
-    if (params.save_audio) {
+    if (this->params.save_audio) {
         // Get current date/time for filename
         time_t now = time(nullptr);
         char buffer[80];
@@ -178,7 +177,7 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 
     // main audio loop
     while (is_running) {
-        if (params.save_audio) {
+        if (this->params.save_audio) {
             wavWriter.write(pcmf32_new.data(), pcmf32_new.size());
         }
         // handle Ctrl + C
@@ -192,7 +191,7 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 
         if (!use_vad) {
             while (true) {
-                audio.get(params.step_ms, pcmf32_new);
+                audio.get(this->params.step_ms, pcmf32_new);
 
                 if ((int)pcmf32_new.size() > 2 * n_samples_step) {
                     LOG_ERROR("TranscribeService", std::string(__func__) + "\n\n%s: WARNING: cannot process audio fast enough, dropping audio ...\n\n");
@@ -210,7 +209,7 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 
             const int n_samples_new = pcmf32_new.size();
 
-            // take up to params.length_ms audio from previous iteration
+            // take up to this->params.length_ms audio from previous iteration
             const int n_samples_take = std::min((int)pcmf32_old.size(), std::max(0, n_samples_keep + n_samples_len - n_samples_new));
 
             // printf("processing: take = %d, new = %d, old = %d\n", n_samples_take, n_samples_new, (int) pcmf32_old.size());
@@ -236,8 +235,8 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 
             audio.get(2000, pcmf32_new);
 
-            if (::vad_simple(pcmf32_new, WHISPER_SAMPLE_RATE, 1000, params.vad_thold, params.freq_thold, false)) {
-                audio.get(params.length_ms, pcmf32);
+            if (::vad_simple(pcmf32_new, WHISPER_SAMPLE_RATE, 1000, this->params.vad_thold, this->params.freq_thold, false)) {
+                audio.get(this->params.length_ms, pcmf32);
             } else {
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -252,25 +251,25 @@ std::string TranscribeService::run(std::vector<std::string> argv)
             whisper_full_params wparams = whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
 
             wparams.print_progress = false;
-            wparams.print_special = params.print_special;
+            wparams.print_special = this->params.print_special;
             wparams.print_realtime = false;
-            wparams.print_timestamps = !params.no_timestamps;
-            wparams.translate = params.translate;
+            wparams.print_timestamps = !this->params.no_timestamps;
+            wparams.translate = this->params.translate;
             wparams.single_segment = !use_vad;
-            wparams.max_tokens = params.max_tokens;
-            wparams.language = params.language.c_str();
-            wparams.n_threads = params.n_threads;
+            wparams.max_tokens = this->params.max_tokens;
+            wparams.language = this->params.language.c_str();
+            wparams.n_threads = this->params.n_threads;
 
-            wparams.audio_ctx = params.audio_ctx;
+            wparams.audio_ctx = this->params.audio_ctx;
 
-            wparams.tdrz_enable = params.tinydiarize; // [TDRZ]
+            wparams.tdrz_enable = this->params.tinydiarize; // [TDRZ]
 
             // disable temperature fallback
             // wparams.temperature_inc  = -1.0f;
-            wparams.temperature_inc = params.no_fallback ? 0.0f : wparams.temperature_inc;
+            wparams.temperature_inc = this->params.no_fallback ? 0.0f : wparams.temperature_inc;
 
-            wparams.prompt_tokens = params.no_context ? nullptr : prompt_tokens.data();
-            wparams.prompt_n_tokens = params.no_context ? 0 : prompt_tokens.size();
+            wparams.prompt_tokens = this->params.no_context ? nullptr : prompt_tokens.data();
+            wparams.prompt_n_tokens = this->params.no_context ? 0 : prompt_tokens.size();
 
             if (whisper_full(ctx, wparams, pcmf32.data(), pcmf32.size()) != 0) {
                 LOG_ERROR("TranscribeService", (argv[0] + " : failed to process audio\n").c_str());
@@ -300,12 +299,12 @@ std::string TranscribeService::run(std::vector<std::string> argv)
                 for (int i = 0; i < n_segments; ++i) {
                     const char *text = whisper_full_get_segment_text(ctx, i);
 
-                    if (params.no_timestamps) {
+                    if (this->params.no_timestamps) {
                         transcript += text;
 
                         std::string output = text;
 
-                        if (this->timeoutChecker(output, params)) {
+                        if (this->timeoutChecker(output)) {
                             audio.pause();
 
                             whisper_print_timings(ctx);
@@ -320,7 +319,7 @@ std::string TranscribeService::run(std::vector<std::string> argv)
                         // std::string output = "[" + to_timestamp(t0, false) + " --> " + to_timestamp(t1, false) + "]  " + text;
                         std::string output = text;
 
-                        if (this->timeoutChecker(output, params)) {
+                        if (this->timeoutChecker(output)) {
                             audio.pause();
 
                             whisper_print_timings(ctx);
@@ -336,13 +335,13 @@ std::string TranscribeService::run(std::vector<std::string> argv)
 
                         transcript += output;
 
-                        if (params.fname_out.length() > 0) {
+                        if (this->params.fname_out.length() > 0) {
                             fout << output;
                         }
                     }
                 }
 
-                /* if (params.fname_out.length() > 0) {
+                /* if (this->params.fname_out.length() > 0) {
                     fout << std::endl;
                 } */
 
@@ -361,7 +360,7 @@ std::string TranscribeService::run(std::vector<std::string> argv)
                 pcmf32_old = std::vector<float>(pcmf32.end() - n_samples_keep, pcmf32.end());
 
                 // Add tokens of the last full length segment as the prompt
-                if (!params.no_context) {
+                if (!this->params.no_context) {
                     prompt_tokens.clear();
 
                     const int n_segments = whisper_full_n_segments(ctx);
@@ -384,7 +383,7 @@ std::string TranscribeService::run(std::vector<std::string> argv)
     return transcript;
 }
 
-bool TranscribeService::timeoutChecker(std::string &output, WhisperParams &params)
+bool TranscribeService::timeoutChecker(std::string &output)
 {
     // first silence
     LOG_DEBUG("TranscribeService", "inside timeout_checker: " + output);
@@ -398,7 +397,7 @@ bool TranscribeService::timeoutChecker(std::string &output, WhisperParams &param
     } else if (output.compare(" [BLANK_AUDIO]") == 0 && this->silenceStart) // check for timeout
     {
         auto end = std::chrono::high_resolution_clock::now();
-        if (std::chrono::duration_cast<std::chrono::seconds>(end - beg).count() >= params.timeoutDuration) {
+        if (std::chrono::duration_cast<std::chrono::seconds>(end - beg).count() >= this->params.timeoutDuration) {
             LOG_INFO("TranscribeService", "Transcription timed out due to silence");
             LOG_DEBUG("TranscribeService", "inside timeout_checker: silence timeout initiated");
             return true;

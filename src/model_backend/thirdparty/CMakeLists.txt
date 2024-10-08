@@ -1,7 +1,7 @@
 set(CMAKE_AUTOMOC OFF)
 set(CMAKE_CUDA_COMPILER /usr/local/cuda/bin/nvcc)
 set(BUILD_SHARED_LIBS OFF)
-#set(WHISPER_OPENVINO ON)
+set(WHISPER_OPENVINO ON)
 set(GGML_CUDA ON)
 
 find_package(SDL2 REQUIRED)
