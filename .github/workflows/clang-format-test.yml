@@ -16,10 +16,4 @@ jobs:
 
     - name: Run clang-format
       run: |
-        SOURCE_DIR="src"
-        find "$SOURCE_DIR" -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.tpp" \) | while read -r FILENAME; do
-          if ! clang-format -output-replacements-xml "$FILENAME" | grep -q "<replacement "; then
-            echo "::error file=$FILENAME::File is not formatted correctly"
-            exit 1
-          fi
-        done
+        SOURCE_DIR="src" && find "$SOURCE_DIR" -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.tpp" \) | while read -r FILENAME; do clang-format -in "$FILENAME" -Werror; done
