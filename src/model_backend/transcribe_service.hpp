@@ -4,7 +4,6 @@
 #include "logging.hpp"
 #include "whisper.h"
 
-
 #include <cassert>
 #include <chrono>
 #include <cstdio>
@@ -12,6 +11,7 @@
 #include <filesystem>
 #include <fstream>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -68,4 +68,4 @@ public:
     }
 
     std::string run(std::vector<std::string> argv = std::vector<std::string>());
-};  
+};
