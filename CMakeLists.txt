@@ -31,7 +31,7 @@ add_subdirectory(src/common)
 add_subdirectory(src/model_backend)
 add_subdirectory(src/screenshot)
 
-#include(KDEClangFormat)
-#file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.hpp *.c)
-#kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+include(KDEClangFormat)
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.hpp *.c)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
