@@ -14,7 +14,6 @@
 class ModelApi
 {
 private:
-    
     std::string model;
     std::string transcriptionModel;
     std::string systemPrompt;
@@ -40,7 +39,6 @@ private:
     bool isOllamaRunning();
 
     // Function to start Ollama server in a separate process
-    
 
     bool doesFolderExist();
 
@@ -49,10 +47,14 @@ private:
     void mainFolderInit();
 
 public:
-
     // Constructor with initializer list
-    ModelApi(std::string model = "moondream:1.8b-v2-q5_K_M", std::string transcriptionModel = "ggml-small.en.bin",std::string systemPrompt = "You are a helpful AI assistant, who is good at solving the user's queries be it related to coding, general knowledge or anything else a human assistant is capable of. you also have excellent image recognition and analysis skills due to have multi model capabilites, now following will be the user's queries, analyse them carefully and repsond back to the user properly. ");
-    
+    ModelApi(std::string model = "moondream:1.8b-v2-q5_K_M",
+             std::string transcriptionModel = "ggml-small.en.bin",
+             std::string systemPrompt =
+                 "You are a helpful AI assistant, who is good at solving the user's queries be it related to coding, general knowledge or anything else a "
+                 "human assistant is capable of. you also have excellent image recognition and analysis skills due to have multi model capabilites, now "
+                 "following will be the user's queries, analyse them carefully and repsond back to the user properly. ");
+
     // Destructor to stop the Ollama server
     ~ModelApi();
 
@@ -75,5 +77,3 @@ public:
 
     std::string transcriptionService(std::vector<std::string> argv = std::vector<std::string>());
 };
-
-

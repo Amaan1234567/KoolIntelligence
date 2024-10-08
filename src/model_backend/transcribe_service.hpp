@@ -7,16 +7,16 @@
 #include <cassert>
 #include <chrono>
 #include <cstdio>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
-#include <cstdlib> 
 
 // command-line parameters
 struct WhisperParams {
-    //do not fuck with the names of these params thinking it dosent follow style, these have to be as it is, dependency of whisper.cpp
+    // do not fuck with the names of these params thinking it dosent follow style, these have to be as it is, dependency of whisper.cpp
     int32_t n_threads = std::min(4, (int32_t)std::thread::hardware_concurrency());
     int32_t step_ms = 1200;
     int32_t length_ms = 5000;
@@ -39,7 +39,7 @@ struct WhisperParams {
     bool flash_attn = true;
 
     std::string language = "en";
-    std::string model = std::string(getenv("HOME"))+"/koolintelligence/models/ggml-small.en.bin";
+    std::string model = std::string(getenv("HOME")) + "/koolintelligence/models/ggml-small.en.bin";
     std::string fname_out;
     int timeoutDuration = 5;
 };

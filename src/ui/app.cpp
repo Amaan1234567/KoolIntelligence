@@ -49,7 +49,7 @@ App::App(int argc, char *argv[])
 
 int App::run()
 {
-    //LOG_INFO("app", this->model_api_instance->transcriptionService());
+    // LOG_INFO("app", this->model_api_instance->transcriptionService());
     if (this->engine->rootObjects().isEmpty()) {
         return -1;
     }
