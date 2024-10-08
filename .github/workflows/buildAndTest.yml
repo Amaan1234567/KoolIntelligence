@@ -16,7 +16,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install build-essential cmake ninja-build gettext gperf *wayland* libsdl2-dev --fix-missing
+        sudo apt install build-essential cmake ninja-build gettext gperf *wayland* libsdl2-dev clang-format --fix-missing
 
     - name: Install CUDA
       uses: Jimver/cuda-toolkit@v0.2.17
@@ -136,7 +136,13 @@ jobs:
         cmake -S kiconthemes -B kiconthemes/build -GNinja 
         cmake --build kiconthemes/build --parallel
         sudo cmake --install kiconthemes/build
-    
+
+    - name: Remove specific lines from CMakeLists.txt
+      run: |
+        sed -i '/include(KDEClangFormat)/d' CMakeLists.txt
+        sed -i '/file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES \*.cpp \*.h \*.hpp \*.c)/d' CMakeLists.txt
+        sed -i '/kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})/d' CMakeLists.txt
+
     - name: Configure Repo
       run: |
         git submodule init

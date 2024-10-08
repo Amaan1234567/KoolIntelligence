@@ -2,9 +2,6 @@
 #include "logging.hpp"
 #include "transcribe_service.hpp"
 
-
-
-
 // Function to execute a command and get the output
 std::string ModelApi::execCommand(const std::string &command)
 {
@@ -34,37 +31,32 @@ bool ModelApi::isOllamaInstalled()
 
 bool ModelApi::doesFolderExist()
 {
-    std::filesystem::directory_entry path{std::string(getenv("HOME"))+"/koolintelligence"};
+    std::filesystem::directory_entry path{std::string(getenv("HOME")) + "/koolintelligence"};
     return path.exists();
 }
 
-
 void ModelApi::mainFolderInit()
 {
-    std::filesystem::create_directories(std::string(getenv("HOME"))+"/koolintelligence/models");
-    std::filesystem::create_directories(std::string(getenv("HOME"))+"/koolintelligence/sessions");
-    std::filesystem::create_directories(std::string(getenv("HOME"))+"/koolintelligence/screenshots");
-    std::filesystem::create_directories(std::string(getenv("HOME"))+"/koolintelligence/terminal_settings");
-    std::filesystem::create_directories(std::string(getenv("HOME"))+"/koolintelligence/scripts");
-    std::filesystem::create_directories(std::string(getenv("HOME"))+"/koolintelligence/logs");  
+    std::filesystem::create_directories(std::string(getenv("HOME")) + "/koolintelligence/models");
+    std::filesystem::create_directories(std::string(getenv("HOME")) + "/koolintelligence/sessions");
+    std::filesystem::create_directories(std::string(getenv("HOME")) + "/koolintelligence/screenshots");
+    std::filesystem::create_directories(std::string(getenv("HOME")) + "/koolintelligence/terminal_settings");
+    std::filesystem::create_directories(std::string(getenv("HOME")) + "/koolintelligence/scripts");
+    std::filesystem::create_directories(std::string(getenv("HOME")) + "/koolintelligence/logs");
 
-    std::ofstream logs(std::string(getenv("HOME"))+"/koolintelligence/logs/logs.log");
+    std::ofstream logs(std::string(getenv("HOME")) + "/koolintelligence/logs/logs.log");
     logs.close();
-    
-    std::filesystem::copy(std::string(PROJECT_DIR)+"/src/model_backend/download-ggml-model.sh",std::string(getenv("HOME"))+"/koolintelligence/scripts/download-ggml-model.sh");
 
+    std::filesystem::copy(std::string(PROJECT_DIR) + "/src/model_backend/download-ggml-model.sh",
+                          std::string(getenv("HOME")) + "/koolintelligence/scripts/download-ggml-model.sh");
 }
 
-
-//main function which checks if the folder for our app is present in user's HOME directory
+// main function which checks if the folder for our app is present in user's HOME directory
 void ModelApi::folderCheck()
 {
-    if(ModelApi::doesFolderExist())
-    {
-        LOG_INFO("ModelApi","inside folderCheck: main folder found skipping init");
-    }
-    else
-    {
+    if (ModelApi::doesFolderExist()) {
+        LOG_INFO("ModelApi", "inside folderCheck: main folder found skipping init");
+    } else {
         ModelApi::mainFolderInit();
     }
 }
@@ -109,7 +101,7 @@ void ModelApi::startOllama()
 {
     LOG_INFO("ModelApi", "Starting Ollama server...");
     this->ollamaPid = fork(); // Fork a new process
-    
+
     if (this->ollamaPid == 0) {
         // Child process: run the Ollama server
         execlp("ollama", "ollama", "serve", nullptr);
@@ -124,34 +116,31 @@ void ModelApi::stopOllama()
 {
     if (this->ollamaPid > 0) {
         LOG_INFO("ModelApi", "Stopping Ollama server...");
-        LOG_INFO("ModelApi", "ollama pid: "+std::to_string(this->ollamaPid));
-        
+        LOG_INFO("ModelApi", "ollama pid: " + std::to_string(this->ollamaPid));
+
         kill(this->ollamaPid, 9); // Stop the server process
         this->ollamaPid = 0;
     }
 
-    //to unload the model from VRAM
-    ModelApi::execCommand("curl http://localhost:11434/api/generate -d '{\"model\": \""+this->model+"\", \"keep_alive\": 0}\'");
+    // to unload the model from VRAM
+    ModelApi::execCommand("curl http://localhost:11434/api/generate -d '{\"model\": \"" + this->model + "\", \"keep_alive\": 0}\'");
 }
 
 // Constructor with initializer list
-ModelApi::ModelApi(std::string model, std::string transcriptionModel,std::string systemPrompt)
+ModelApi::ModelApi(std::string model, std::string transcriptionModel, std::string systemPrompt)
     : model(model)
     , transcriptionModel(transcriptionModel)
     , systemPrompt(systemPrompt)
     , ollamaPid(0)
-    
-    
-{   
-    
+
+{
     ModelApi::folderCheck();
-    this->mainFolderPath = std::string(getenv("HOME"))+"/koolintelligence/";
+    this->mainFolderPath = std::string(getenv("HOME")) + "/koolintelligence/";
     // Initialize options with some default values
     this->options["temperature"] = 1;
     this->options["num_predict"] = 1024;
     this->options["keep_alive"] = -1;
-    
-    
+
     if (!isOllamaRunning())
         this->startOllama();
     // Check if the model is installed; if not, pull it
@@ -188,13 +177,13 @@ std::string ModelApi::getResponse(const std::string &prompt)
         LOG_INFO("ModelApi", "Ollama is installed but not running. Starting Ollama...");
         this->startOllama();
     }
-    
+
     ollama::message message("user", prompt);
 
     this->curSessionHistory.push_back(message);
-    
+
     // Call Ollama's generate function with the provided prompt
-    ollama::response response = ollama::chat(model,this->curSessionHistory, this->options);
+    ollama::response response = ollama::chat(model, this->curSessionHistory, this->options);
     ollama::message model_response("assistant", response.as_simple_string());
     this->curSessionHistory.push_back(model_response);
 
@@ -218,11 +207,11 @@ void ModelApi::getResponseAsync(const std::string &prompt)
     }
     if (!isOllamaRunning()) {
         LOG_INFO("ModelApi", "Ollama is installed but not running. Starting Ollama...");
-        this->startOllama();    
+        this->startOllama();
     }
 
     // Call Ollama's generate function with the provided prompt and the callback
-    ollama::generate(model, prompt, on_receive_response,options = this->options);
+    ollama::generate(model, prompt, on_receive_response, options = this->options);
 }
 
 // Method to generate an image
@@ -254,11 +243,11 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
     std::string modelName = "ggml-small.en.bin";
     std::string neededFile = "/" + modelName;
     std::string modelNameInRepo = "small.en";
-    std::string modelDownloadScriptPath = this->mainFolderPath+"scripts/download-ggml-model.sh";
+    std::string modelDownloadScriptPath = this->mainFolderPath + "scripts/download-ggml-model.sh";
 
     // Check if the file exists using std::filesystem
-    if (!std::filesystem::exists(this->mainFolderPath+"models/"+ neededFile)) {
-        LOG_INFO("ModelApi","File not found, running installation script...");
+    if (!std::filesystem::exists(this->mainFolderPath + "models/" + neededFile)) {
+        LOG_INFO("ModelApi", "File not found, running installation script...");
 
         int ret = system((modelDownloadScriptPath + " " + modelNameInRepo).c_str());
 
@@ -268,7 +257,6 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
             return "error";
         }
     }
-
 
     TranscribeService *service = new TranscribeService();
     std::string transcript = service->run();
