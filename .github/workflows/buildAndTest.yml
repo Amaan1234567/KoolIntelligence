@@ -136,6 +136,41 @@ jobs:
         cmake -S kiconthemes -B kiconthemes/build -GNinja 
         cmake --build kiconthemes/build --parallel
         sudo cmake --install kiconthemes/build
+    
+    - name: Build kdbusaddons
+      run: |
+        git clone https://github.com/KDE/kdbusaddons.git
+        cmake -S kdbusaddons -B kdbusaddons/build -GNinja 
+        cmake --build kdbusaddons/build --parallel
+        sudo cmake --install kdbusaddons/build
+    
+    - name: Build kidletime
+      run: |
+        git clone https://github.com/KDE/kidletime.git
+        cmake -S kidletime -B kidletime/build -GNinja 
+        cmake --build kidletime/build --parallel
+        sudo cmake --install kidletime/build
+    
+    - name: Build solid
+      run: |
+        git clone https://github.com/KDE/solid.git
+        cmake -S solid -B solid/build -GNinja 
+        cmake --build solid/build --parallel
+        sudo cmake --install solid/build
+
+    - name: Build kfilemetadata
+      run: |
+        git clone https://github.com/KDE/kfilemetadata.git
+        cmake -S kfilemetadata -B kfilemetadata/build -GNinja 
+        cmake --build kfilemetadata/build --parallel
+        sudo cmake --install kfilemetadata/build
+
+    - name: Build kcrash
+      run: |
+        git clone https://github.com/KDE/kcrash.git
+        cmake -S kcrash -B kcrash/build -GNinja 
+        cmake --build kcrash/build --parallel
+        sudo cmake --install kcrash/build
 
     - name: Remove specific lines from CMakeLists.txt
       run: |
