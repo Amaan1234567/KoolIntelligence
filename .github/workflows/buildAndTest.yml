@@ -18,7 +18,7 @@ jobs:
         sudo apt update
         sudo apt install build-essential cmake ninja-build meson gettext gperf *wayland* libsdl2-dev clang-format libxcb-sync-dev flex bison udev ffmpeg libattr1-dev libx11* --fix-missing
         sudo apt remove wayland-protocols
-        
+
     - name: Install CUDA
       uses: Jimver/cuda-toolkit@v0.2.17
       id: cuda-toolkit
@@ -145,12 +145,16 @@ jobs:
         cmake --build kdbusaddons/build --parallel
         sudo cmake --install kdbusaddons/build
     
-    - name: Build wayland-protocols
+    - name: Clone wayland-protocols
       run: |
         git clone https://gitlab.freedesktop.org/wayland/wayland-protocols.git
+        
+    - name: Build wayland-protocols
+      working-directory: wayland-protocols
+      run: |
         meson setup build
         meson compile -C build
-        sudo meson install -C builddir
+        sudo meson install -C build
 
     - name: Build kidletime
       run: |
@@ -179,6 +183,13 @@ jobs:
         cmake -S kcrash -B kcrash/build -GNinja 
         cmake --build kcrash/build --parallel
         sudo cmake --install kcrash/build
+    
+    - name: Build baloo
+      run: |
+        git clone https://github.com/KDE/baloo.git
+        cmake -S baloo -B baloo/build -GNinja 
+        cmake --build baloo/build --parallel
+        sudo cmake --install baloo/build
 
     - name: Remove specific lines from CMakeLists.txt
       run: |
