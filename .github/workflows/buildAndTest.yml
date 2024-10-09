@@ -16,7 +16,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install build-essential cmake ninja-build meson gettext gperf *wayland* libsdl2-dev clang-format libxcb-sync-dev flex bison udev ffmpeg libattr1-dev libx11* --fix-missing
+        sudo apt install build-essential cmake ninja-build meson gettext gperf *wayland* libsdl2-dev clang-format libxcb-sync-dev flex bison udev libxslt1-dev libxml2-dev docbook-xsl docbook-xml xsltproc ffmpeg libattr1-dev libx11* --fix-missing
         sudo apt remove wayland-protocols
 
     - name: Install CUDA
@@ -184,10 +184,24 @@ jobs:
         cmake --build kcrash/build --parallel
         sudo cmake --install kcrash/build
 
+    - name: Build kdoctools
+      run: |
+        git clone https://github.com/KDE/kdoctools.git
+        cmake -S kdoctools -B kdoctools/build -GNinja 
+        cmake --build kdoctools/build --parallel
+        sudo cmake --install kdoctools/build
+
+    - name: Build kservice
+      run: |
+        git clone https://github.com/KDE/kservice.git
+        cmake -S kservice -B kservice/build -GNinja 
+        cmake --build kservice/build --parallel
+        sudo cmake --install kservice/build
+
     - name: Build kio
       run: |
         git clone https://github.com/KDE/kio.git
-        cmake -S kio -B kio/build -GNinja
+        cmake -S kio -B kio/build -GNinja -DKIOCORE_ONLY=ON
         cmake --build kio/build --parallel
         sudo cmake --install kio/build
     
