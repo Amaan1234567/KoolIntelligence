@@ -21,6 +21,7 @@ find_package(KF6 REQUIRED COMPONENTS
     CoreAddons
     QQC2DesktopStyle
     IconThemes
+    Baloo 
     )
 
 #these two options MUST be here only, else qt like a big dumb pussy will not allow us to compile this and throw random errors
@@ -60,6 +61,7 @@ target_link_libraries(koolintelligence
     KF6::I18n
     KF6::CoreAddons
     KF6::IconThemes
+    KF6::Baloo
 )
     
 install(TARGETS koolintelligence ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

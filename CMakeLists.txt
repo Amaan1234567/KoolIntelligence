@@ -30,6 +30,7 @@ add_subdirectory(src/ui)
 add_subdirectory(src/common)
 add_subdirectory(src/model_backend)
 add_subdirectory(src/screenshot)
+add_subdirectory(src/file_search)
 
 include(KDEClangFormat)
 file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.hpp *.c)
