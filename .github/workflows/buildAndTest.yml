@@ -183,6 +183,13 @@ jobs:
         cmake -S kcrash -B kcrash/build -GNinja 
         cmake --build kcrash/build --parallel
         sudo cmake --install kcrash/build
+
+    - name: Build kio
+      run: |
+        git clone https://github.com/KDE/kio.git
+        cmake -S kio -B kio/build -GNinja
+        cmake --build kio/build --parallel
+        sudo cmake --install kio/build
     
     - name: Build baloo
       run: |
