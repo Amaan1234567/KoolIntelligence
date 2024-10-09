@@ -152,7 +152,7 @@ jobs:
     - name: Build wayland-protocols
       working-directory: wayland-protocols
       run: |
-        meson setup build
+        meson setup build -Dtests=false
         meson compile -C build
         sudo meson install -C build
 
