@@ -197,6 +197,13 @@ jobs:
         cmake -S kservice -B kservice/build -GNinja 
         cmake --build kservice/build --parallel
         sudo cmake --install kservice/build
+    
+    - name: Build kauth
+      run: |
+        git clone https://github.com/KDE/kauth.git
+        cmake -S kauth -B kauth/build -GNinja 
+        cmake --build kauth/build --parallel
+        sudo cmake --install kauth/build
 
     - name: Build kio
       run: |
