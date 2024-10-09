@@ -9,8 +9,8 @@
 #include <unistd.h>
 
 #include "app.hpp"
-#include "logging.hpp"
 #include "file_search.hpp"
+#include "logging.hpp"
 
 template<typename T>
 inline void registerInstance(T *instance, const char *name)
