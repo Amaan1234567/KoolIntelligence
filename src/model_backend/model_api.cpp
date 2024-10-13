@@ -137,8 +137,8 @@ ModelApi::ModelApi(std::string model, std::string transcriptionModel, std::strin
     ModelApi::folderCheck();
     this->mainFolderPath = std::string(getenv("HOME")) + "/koolintelligence/";
     // Initialize options with some default values
-    this->options["temperature"] = 1;
-    this->options["num_predict"] = 1024;
+    this->options["temperature"] = 0.2;
+    this->options["num_predict"] = -1;
     this->options["keep_alive"] = -1;
 
     if (!isOllamaRunning())
@@ -259,7 +259,8 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
     }
 
     TranscribeService *service = new TranscribeService();
-    std::string transcript = service->run();
+    auto req = service->asyncRun();
+    std::string transcript = req.get();
     LOG_INFO("ModelApi", transcript);
     return transcript;
 }

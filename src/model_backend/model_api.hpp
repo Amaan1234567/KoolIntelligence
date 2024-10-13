@@ -49,7 +49,7 @@ private:
 
 public:
     // Constructor with initializer list
-    ModelApi(std::string model = "moondream:1.8b-v2-q5_K_M",
+    ModelApi(std::string model = "llava-phi3:3.8b",
              std::string transcriptionModel = "ggml-small.en.bin",
              std::string systemPrompt =
                  "You are a helpful AI assistant, who is good at solving the user's queries be it related to coding, general knowledge or anything else a "
