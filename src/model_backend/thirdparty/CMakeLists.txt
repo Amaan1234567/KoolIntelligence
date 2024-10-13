@@ -56,23 +56,23 @@ target_link_libraries(cpuOnlyWhisper PRIVATE SDL2 whisper)
 target_compile_definitions(cpuOnlyWhisper PRIVATE WHISPER_USE_OPENVINO)
 
 message(STATUS "Configuring CUDA version...")
-add_executable(cudaWhisper "${CMAKE_CURRENT_SOURCE_DIR}/whisper.cpp/examples/stream/stream.cpp")
-target_sources(cudaWhisper PRIVATE 
+add_executable(cudaOnlyWhisper "${CMAKE_CURRENT_SOURCE_DIR}/whisper.cpp/examples/stream/stream.cpp")
+target_sources(cudaOnlyWhisper PRIVATE 
     whisper.cpp/examples/common-sdl.cpp 
     whisper.cpp/examples/common.cpp
 )
-target_include_directories(cudaWhisper PRIVATE
+target_include_directories(cudaOnlyWhisper PRIVATE
     whisper.cpp/include
     whisper.cpp/spm-headers
     whisper.cpp/examples
     ${SDL2_INCLUDE_DIRS}
     ${CUDA_INCLUDE_DIRS}
 )
-target_link_libraries(cudaWhisper PRIVATE SDL2 whisper ${CUDA_LIBRARIES})
+target_link_libraries(cudaOnlyWhisper PRIVATE SDL2 whisper ${CUDA_LIBRARIES})
 
-target_compile_definitions(cudaWhisper PRIVATE GGML_USE_CUBLAS)
+target_compile_definitions(cudaOnlyWhisper PRIVATE GGML_USE_CUBLAS)
 
 message(STATUS "Configuring installation...")
-install(TARGETS cpuOnlyWhisper cudaWhisper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS cpuOnlyWhisper cudaOnlyWhisper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 message(STATUS "CMake configuration completed.")
