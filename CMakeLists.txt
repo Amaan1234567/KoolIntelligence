@@ -24,6 +24,7 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 # Set common flags
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+include(KDEClangFormat)
 
 # Add subdirectories
 add_subdirectory(src/ui)
@@ -32,7 +33,5 @@ add_subdirectory(src/model_backend)
 add_subdirectory(src/screenshot)
 add_subdirectory(src/file_search)
 
-include(KDEClangFormat)
-file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.hpp *.c)
-kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
 

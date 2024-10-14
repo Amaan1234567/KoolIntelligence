@@ -239,11 +239,11 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
     // pass args for transciption service in format ({"parameter_name","param_value","param_name","param_value"})
     // check transcription_service.hpp to see all the parameters that can be set, for more info look at whisper.cpp repo
 
-    std::string whisperCppPath = "~";
-    std::string modelName = "ggml-small.en.bin";
-    std::string neededFile = "/" + modelName;
-    std::string modelNameInRepo = "small.en";
-    std::string modelDownloadScriptPath = this->mainFolderPath + "scripts/download-ggml-model.sh";
+    const std::string whisperCppPath = "~";
+    const std::string modelName = "ggml-small.en.bin";
+    const std::string neededFile = "/" + modelName;
+    const std::string modelNameInRepo = "small.en";
+    const std::string modelDownloadScriptPath = this->mainFolderPath + "scripts/download-ggml-model.sh";
 
     // Check if the file exists using std::filesystem
     if (!std::filesystem::exists(this->mainFolderPath + "models/" + neededFile)) {
