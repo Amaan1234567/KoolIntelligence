@@ -7,15 +7,11 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
-#include <filesystem>
-#include <fstream>
+#include <future>
 #include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
-#include <thread>
-#include <future>
-
 
 // command-line parameters
 struct WhisperParams {
@@ -47,15 +43,13 @@ struct WhisperParams {
 
 class TranscribeService
 {
-   
     bool silenceStart = false;
 
     std::string paramStructToStringConverter();
 
-    //std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
+    // std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
 
 public:
-    
     WhisperParams params;
     TranscribeService()
     {
@@ -68,5 +62,3 @@ public:
     std::string run();
     std::future<std::string> asyncRun();
 };
-
-
