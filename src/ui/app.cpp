@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "app.hpp"
+#include "file_search.hpp"
 #include "logging.hpp"
 
 template<typename T>
@@ -50,6 +51,10 @@ App::App(int argc, char *argv[])
 int App::run()
 {
     // LOG_INFO("app", this->model_api_instance->transcriptionService());
+    // std::vector<std::string> results = fileSearchKDE("main.cpp");
+    // for (const std::string &result : results) {
+    //     LOG_INFO("App", "File Search Result: " + result);
+    // }
     if (this->engine->rootObjects().isEmpty()) {
         return -1;
     }
