@@ -1,14 +1,13 @@
 #pragma once
-#include "common-sdl.h"
-#include "common.h"
-#include "logging.hpp"
-#include "whisper.h"
 
+#include "logging.hpp"
 #include <cassert>
 #include <chrono>
 #include <cstdio>
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
+#include <future>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -28,31 +27,38 @@ struct WhisperParams {
     float vad_thold = 0.8f;
     float freq_thold = 100.0f;
 
-    bool translate = false;
-    bool no_fallback = false;
-    bool print_special = false;
-    bool no_context = true;
-    bool no_timestamps = false;
-    bool tinydiarize = false;
-    bool save_audio = false; // save audio to wav file
-    bool use_gpu = true;
+    std::string translate = "false";
+    std::string no_fallback = "false";
+    std::string print_special = "false";
+    std::string keep_context = "true";
+    std::string tinydiarize = "false";
+    std::string save_audio = "false"; // save audio to wav file
+    bool no_gpu = true;
     bool flash_attn = true;
 
     std::string language = "en";
     std::string model = std::string(getenv("HOME")) + "/koolintelligence/models/ggml-small.en.bin";
     std::string fname_out;
-    int timeoutDuration = 5;
 };
 
 class TranscribeService
 {
-    bool whisperParamsParse(std::vector<std::string> argv, WhisperParams &params);
-
-    bool timeoutChecker(std::string &output, WhisperParams &params);
-
-    std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
     bool silenceStart = false;
 
+    std::string paramStructToStringConverter();
+
+    // std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
+
 public:
-    std::string run(std::vector<std::string> argv = std::vector<std::string>());
+    WhisperParams params;
+    TranscribeService()
+    {
+        if (std::filesystem::exists("/usr/lib/libcuda.so"))
+            this->params.no_gpu = false;
+        else
+            this->params.no_gpu = true;
+    }
+
+    std::string run();
+    std::future<std::string> asyncRun();
 };

@@ -137,8 +137,8 @@ ModelApi::ModelApi(std::string model, std::string transcriptionModel, std::strin
     ModelApi::folderCheck();
     this->mainFolderPath = std::string(getenv("HOME")) + "/koolintelligence/";
     // Initialize options with some default values
-    this->options["temperature"] = 1;
-    this->options["num_predict"] = 1024;
+    this->options["temperature"] = 0.2;
+    this->options["num_predict"] = -1;
     this->options["keep_alive"] = -1;
 
     if (!isOllamaRunning())
@@ -239,11 +239,11 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
     // pass args for transciption service in format ({"parameter_name","param_value","param_name","param_value"})
     // check transcription_service.hpp to see all the parameters that can be set, for more info look at whisper.cpp repo
 
-    std::string whisperCppPath = "~";
-    std::string modelName = "ggml-small.en.bin";
-    std::string neededFile = "/" + modelName;
-    std::string modelNameInRepo = "small.en";
-    std::string modelDownloadScriptPath = this->mainFolderPath + "scripts/download-ggml-model.sh";
+    const std::string whisperCppPath = "~";
+    const std::string modelName = "ggml-small.en.bin";
+    const std::string neededFile = "/" + modelName;
+    const std::string modelNameInRepo = "small.en";
+    const std::string modelDownloadScriptPath = this->mainFolderPath + "scripts/download-ggml-model.sh";
 
     // Check if the file exists using std::filesystem
     if (!std::filesystem::exists(this->mainFolderPath + "models/" + neededFile)) {
@@ -259,7 +259,8 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
     }
 
     TranscribeService *service = new TranscribeService();
-    std::string transcript = service->run();
+    auto req = service->asyncRun();
+    std::string transcript = req.get();
     LOG_INFO("ModelApi", transcript);
     return transcript;
 }
