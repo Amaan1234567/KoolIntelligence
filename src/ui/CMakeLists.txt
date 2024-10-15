@@ -13,6 +13,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     QuickControls2
     Widgets
     DBus
+
 )
 
 find_package(KF6 REQUIRED COMPONENTS
@@ -21,6 +22,9 @@ find_package(KF6 REQUIRED COMPONENTS
     CoreAddons
     QQC2DesktopStyle
     IconThemes
+    XmlGui
+    KIO
+    Parts
     )
 
 #these two options MUST be here only, else qt like a big dumb pussy will not allow us to compile this and throw random errors
@@ -39,6 +43,7 @@ ecm_add_qml_module(koolintelligence
 ecm_target_qml_sources(koolintelligence
     SOURCES
     qml/Main.qml
+    qml/TerminalPanel.qml
 )
 
 file(GLOB UI_CPP_FILES *.cpp)
@@ -60,8 +65,11 @@ target_link_libraries(koolintelligence
     KF6::I18n
     KF6::CoreAddons
     KF6::IconThemes
+    KF6::XmlGui
+    KF6::KIOCore
+    KF6::Parts
 )
-    
 install(TARGETS koolintelligence ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.koolintelligence.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+add_subdirectory(terminal)

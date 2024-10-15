@@ -4,6 +4,7 @@
 #include "userPromptField.hpp"
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <terminal/terminalpanel.hpp>
 class App
 {
 public:
@@ -19,5 +20,6 @@ private:
     ChatHistoryModel *chatHistoryModel;
     model_api *model_api_instance;
     UserPromptField *userPromptField;
+    TerminalPanel *terminalPanel;
     std::string user_name;
 };

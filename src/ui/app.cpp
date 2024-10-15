@@ -41,8 +41,10 @@ App::App(int argc, char *argv[])
     this->model_api_instance = new model_api();
     this->userPromptField = new UserPromptField();
     this->userPromptField->setApp((void *)this);
+    this->terminalPanel = new TerminalPanel();
     registerInstance(this->chatHistoryModel, "ChatHistoryModel");
     registerInstance(this->userPromptField, "UserPromptField");
+    registerInstance(this->terminalPanel, "TerminalPanel");
     this->engine->rootContext()->setContextObject(new KLocalizedContext(this->engine));
     this->engine->loadFromModule("org.kde.koolintelligence", "Main");
 }
@@ -97,4 +99,5 @@ App::~App()
     delete this->app;
     delete this->model_api_instance;
     delete this->userPromptField;
+    delete this->terminalPanel;
 }
