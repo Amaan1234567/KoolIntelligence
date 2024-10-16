@@ -4,6 +4,7 @@
 #include "userPromptField.hpp"
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <future>
 class App
 {
 public:
@@ -14,6 +15,7 @@ public:
 
 private:
     void setUserName();
+    void getModelResponse(std::future<std::string> futureMessage, int chatIndex);
     QApplication *app;
     QQmlApplicationEngine *engine;
     ChatHistoryModel *chatHistoryModel;

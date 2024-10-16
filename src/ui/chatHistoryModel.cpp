@@ -1,10 +1,11 @@
 #include "chatHistoryModel.hpp"
 
-void ChatHistoryModel::addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft)
+int ChatHistoryModel::addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft)
 {
     beginInsertRows(QModelIndex(), m_chatHistory.count(), m_chatHistory.count());
     m_chatHistory.append({chatText, author, time, alignLeft});
     endInsertRows();
+    return m_chatHistory.count() - 1;
 }
 
 QHash<int, QByteArray> ChatHistoryModel::roleNames() const
@@ -38,4 +39,11 @@ int ChatHistoryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_chatHistory.count();
+}
+
+void ChatHistoryModel::removeChatMessage(int index)
+{
+    beginRemoveRows(QModelIndex(), index, index);
+    m_chatHistory.remove(index);
+    endRemoveRows();
 }

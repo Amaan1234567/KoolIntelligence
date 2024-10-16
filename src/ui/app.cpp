@@ -1,16 +1,16 @@
+#include "app.hpp"
+#include "file_search.hpp"
+#include "logging.hpp"
 #include <KIconTheme>
 #include <KLocalizedContext>
 #include <KLocalizedString>
 #include <QQuickStyle>
 #include <QUrl>
 #include <QtQml>
+
 #include <pwd.h>
 #include <string>
 #include <unistd.h>
-
-#include "app.hpp"
-#include "file_search.hpp"
-#include "logging.hpp"
 
 template<typename T>
 inline void registerInstance(T *instance, const char *name)
@@ -76,9 +76,21 @@ void App::userPrompt(const QString &text)
 {
     LOG_DEBUG("App", "User Prompt: " + text.toStdString());
     this->chatHistoryModel->addChatMessage(text, QString::fromStdString(this->user_name), QString::fromStdString(getTimestamp()), true);
-    std::string message = this->model_api_instance->getResponse(text.toStdString());
-    LOG_DEBUG("App", "Model Response: " + message);
-    this->chatHistoryModel->addChatMessage(QString::fromStdString(message),
+    std::future<std::string> futureMessage = std::async(std::launch::async, &ModelApi::getResponse, this->model_api_instance, text.toStdString());
+    LOG_DEBUG("App", "Waiting for model response...");
+    int chatIndex = this->chatHistoryModel->addChatMessage(QString().fromStdString("Waiting for response..."),
+                                                           QString::fromStdString("Kool Intelligence"),
+                                                           QString::fromStdString(getTimestamp()),
+                                                           false);
+    std::thread(&App::getModelResponse, this, std::move(futureMessage), chatIndex).detach();
+}
+
+void App::getModelResponse(std::future<std::string> futureMessage, int chatIndex)
+{
+    std::string message = futureMessage.get();
+    LOG_DEBUG("App", "Model response: " + message);
+    this->chatHistoryModel->removeChatMessage(chatIndex);
+    this->chatHistoryModel->addChatMessage(QString().fromStdString(message),
                                            QString::fromStdString("Kool Intelligence"),
                                            QString::fromStdString(getTimestamp()),
                                            false);
