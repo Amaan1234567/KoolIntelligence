@@ -14,18 +14,13 @@ Kirigami.ApplicationWindow {
 
     globalDrawer: Kirigami.GlobalDrawer {
         id: globalDrawer
-        isMenu: true
+        isMenu: false
         actions: [
-            Kirigami.Action {
-                text: i18n("Quit")
-                icon.name: "application-exit-symbolic"
-                shortcut: StandardKey.Quit
-                onTriggered: Qt.quit()
-            },
             Kirigami.Action {
                 text: i18n("Settings")
                 icon.name: "preferences-system-symbolic"
                 onTriggered: {
+                    initialPage.visible = false
                     pageStack.push(settingsPage)
                 }
             }
@@ -34,12 +29,23 @@ Kirigami.ApplicationWindow {
     pageStack.initialPage: Kirigami.Page {
         id: initialPage
         title: i18nc("@title", "LLM Chat")
+        actions: [
+             Kirigami.Action {
+                text: i18n("Terminal")
+                icon.name: "utilities-terminal-symbolic"
+                shortcut: "Ctrl+T"
+                onTriggered: {
+                    terminalView.visible = !terminalView.visible
+                    terminalSeperator.visible = !terminalSeperator.visible
+                }
+            }
+        ]
         Controls.SplitView{
             orientation: Qt.Vertical
             anchors.fill: parent
             ColumnLayout{
-                width: parent.width
-                height: parent.height
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 Controls.ScrollView {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -50,7 +56,7 @@ Kirigami.ApplicationWindow {
                     Controls.ScrollBar.vertical.policy: Controls.ScrollBar.AsNeeded
                     Controls.ScrollBar.vertical.interactive: true
                     Kirigami.CardsListView {
-                    id: cardsView
+                    id: chatHistoryView
                     model: ChatHistoryModel
                     delegate: chatHistoryDelegate
                     }
@@ -78,19 +84,18 @@ Kirigami.ApplicationWindow {
                     }
                 }
                 Kirigami.Separator {
-                Layout.fillWidth: true
+                    id: terminalSeperator
+                    visible: false
+                    Layout.fillWidth: true
+                    height: 40
                 }
             }
             Controls.ScrollView {
+                id: terminalView
+                visible: false
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
-                // Item {
-                //     id: terminal
-                //     anchors.fill: parent
-                //     contentItem: terminalWidget
-                // }
-
+                
             }
         }
     }
@@ -104,7 +109,8 @@ Kirigami.ApplicationWindow {
                 text: i18n("Go Back")
                 icon.name: "go-previous-symbolic"
                 onTriggered: {
-                    pageStack.pop(settingsPage)
+                    pageStack.pop()
+                    initialPage.visible = true
                 }
             }
         ]
@@ -115,7 +121,6 @@ Kirigami.ApplicationWindow {
                 text: i18n("Settings")
             }
         }
-        
     }
 
     Component {
@@ -146,6 +151,13 @@ Kirigami.ApplicationWindow {
                 wrapMode: Text.WordWrap
                 Layout.alignment: alignLeft ? Qt.AlignLeft : Qt.AlignRight
                 }
+                // Controls.MarkdownText {
+                // Layout.fillWidth: true
+                // text: chatText
+                // level: 3
+                // wrapMode: Text.WordWrap
+                // Layout.alignment: alignLeft ? Qt.AlignLeft : Qt.AlignRight
+                // }
                 Kirigami.Heading {
                 text: time
                 level: 9
