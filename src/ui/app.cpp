@@ -49,6 +49,7 @@ App::App(int argc, char *argv[])
         QQmlEngine::setObjectOwnership(self, QQmlEngine::CppOwnership);
         return self;
     });
+    LOG_DEBUG("App", "Registered TerminalTabModel");
     registerInstance(this->chatHistoryModel, "ChatHistoryModel");
     registerInstance(this->userPromptField, "UserPromptField");
 
