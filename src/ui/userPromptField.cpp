@@ -12,3 +12,8 @@ void UserPromptField::setApp(void *app)
 {
     this->app = app;
 }
+
+void UserPromptField::resetChat()
+{
+    ((App *)this->app)->resetChat();
+}

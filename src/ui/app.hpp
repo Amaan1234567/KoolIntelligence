@@ -12,6 +12,7 @@ public:
     App(int argc, char *argv[]);
     int run();
     void userPrompt(const QString &text);
+    void resetChat();
     ~App();
 
 private:

@@ -42,6 +42,13 @@ Kirigami.ApplicationWindow {
                     terminalLayout.visible = !terminalLayout.visible
                     terminalSeperator.visible = !terminalSeperator.visible
                 }
+            },
+            Kirigami.Action{
+                text: i18n("Reset Chat")
+                icon.name: "edit-clear-symbolic"
+                onTriggered: {
+                    UserPromptField.resetChat()
+                }
             }
         ]
         spacing: 0

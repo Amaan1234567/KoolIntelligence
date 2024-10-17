@@ -21,7 +21,7 @@ Controls.ScrollView {
     Component {
         id: chatHistoryDelegate
         Kirigami.AbstractCard {
-            width: parent?.width - anchors.margins
+            width: Math.max(0, parent.width - anchors.margins)
             anchors.right: alignLeft ? undefined : parent?.right
             anchors.left: alignLeft ? parent?.left : undefined
             anchors.margins: 90
@@ -45,14 +45,8 @@ Controls.ScrollView {
                 level: 3
                 wrapMode: Text.WordWrap
                 Layout.alignment: alignLeft ? Qt.AlignLeft : Qt.AlignRight
+                textFormat: Text.MarkdownText
                 }
-                // Controls.MarkdownText {
-                // Layout.fillWidth: true
-                // text: chatText
-                // level: 3
-                // wrapMode: Text.WordWrap
-                // Layout.alignment: alignLeft ? Qt.AlignLeft : Qt.AlignRight
-                // }
                 Kirigami.Heading {
                 text: time
                 level: 9

@@ -9,6 +9,8 @@ public:
     {
     }
     Q_SLOT void handleTextChange(const QString &text);
+
+    Q_SLOT void resetChat();
     void setApp(void *app);
 
 private:
