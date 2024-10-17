@@ -28,7 +28,9 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    void addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft);
+    int addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft);
+
+    void removeChatMessage(int index);
 
 private:
     QVector<ChatMessage> m_chatHistory;
