@@ -24,9 +24,6 @@ find_package(KF6 REQUIRED COMPONENTS
     Baloo 
     )
 
-find_path(VTERM_INCLUDE_DIR vterm.h)
-find_library(VTERM_LIBRARY vterm)
-
 #these two options MUST be here only, else qt like a big dumb pussy will not allow us to compile this and throw random errors
 #YOU HAVE BEEN WARNED.(I wasted 4 hours on this piece of dumb shit)
 add_executable(koolintelligence)
@@ -66,7 +63,6 @@ target_link_libraries(koolintelligence
     KF6::CoreAddons
     KF6::IconThemes
     KF6::Baloo
-    ${VTERM_LIBRARY}
 )
     
 install(TARGETS koolintelligence ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
