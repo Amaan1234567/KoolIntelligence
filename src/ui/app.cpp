@@ -1,10 +1,10 @@
 #include "app.hpp"
 #include "file_search.hpp"
 #include "logging.hpp"
-#include <KonsoleQML.h>
 #include <KIconTheme>
 #include <KLocalizedContext>
 #include <KLocalizedString>
+#include <KonsoleQML.h>
 #include <QQuickStyle>
 #include <QUrl>
 #include <QtQml>
@@ -52,7 +52,6 @@ App::App(int argc, char *argv[])
     LOG_DEBUG("App", "Registered TerminalTabModel");
     registerInstance(this->chatHistoryModel, "ChatHistoryModel");
     registerInstance(this->userPromptField, "UserPromptField");
-
 
     this->engine->rootContext()->setContextObject(new KLocalizedContext(this->engine));
     this->engine->loadFromModule("org.kde.koolintelligence", "Main");

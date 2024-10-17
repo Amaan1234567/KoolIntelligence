@@ -1,8 +1,8 @@
 #pragma once
 #include "chatHistoryModel.hpp"
 #include "model_api.hpp"
-#include "userPromptField.hpp"
 #include "terminaltabmodel.hpp"
+#include "userPromptField.hpp"
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <future>

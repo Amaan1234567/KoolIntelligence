@@ -54,7 +54,7 @@ using namespace Konsole;
 // notably moveImage() and clearImage().
 // This macro converts from an X,Y position into an image offset.
 #ifndef loc
-#define loc(X, Y) ((Y)*columns + (X))
+#define loc(X, Y) ((Y) * columns + (X))
 #endif
 
 Character Screen::defaultChar =
