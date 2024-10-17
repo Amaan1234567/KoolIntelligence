@@ -13,6 +13,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     QuickControls2
     Widgets
     DBus
+    Core5Compat
 )
 
 find_package(KF6 REQUIRED COMPONENTS
@@ -22,14 +23,30 @@ find_package(KF6 REQUIRED COMPONENTS
     QQC2DesktopStyle
     IconThemes
     Baloo 
+    Pty
     )
 
-#these two options MUST be here only, else qt like a big dumb pussy will not allow us to compile this and throw random errors
-#YOU HAVE BEEN WARNED.(I wasted 4 hours on this piece of dumb shit)
+#these two options MUST be here, else it will not work
 add_executable(koolintelligence)
 target_compile_options(koolintelligence PRIVATE "-fexceptions")
 
 target_include_directories(koolintelligence PRIVATE ${VTERM_INCLUDE_DIR})
+
+add_library(koolintelligence-components)
+
+ecm_add_qml_module(koolintelligence-components
+    URI org.kde.koolintelligence.components
+    VERSION 1.0
+)
+
+ecm_target_qml_sources(koolintelligence-components
+    SOURCES
+    qml/TerminalLayout.qml
+    qml/ChatHistory.qml
+    qml/SettingsPage.qml
+)
+
+ecm_finalize_qml_module(koolintelligence-components)
 
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 
@@ -50,6 +67,8 @@ target_sources(koolintelligence
     ${UI_CPP_FILES}
 )
 
+add_subdirectory(terminal)
+
 target_link_libraries(koolintelligence
     PRIVATE
     Qt6::Quick
@@ -63,7 +82,10 @@ target_link_libraries(koolintelligence
     KF6::CoreAddons
     KF6::IconThemes
     KF6::Baloo
+    KonsoleQML
+    koolintelligence-components
 )
     
+install(TARGETS koolintelligence-components ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS koolintelligence ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.koolintelligence.desktop DESTINATION ${KDE_INSTALL_APPDIR})

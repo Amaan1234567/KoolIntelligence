@@ -1,6 +1,7 @@
 #include "app.hpp"
 #include "file_search.hpp"
 #include "logging.hpp"
+#include <KonsoleQML.h>
 #include <KIconTheme>
 #include <KLocalizedContext>
 #include <KLocalizedString>
@@ -22,6 +23,7 @@ inline void registerInstance(T *instance, const char *name)
 App::App(int argc, char *argv[])
 {
     this->setUserName();
+    KonsoleQML::registerTypes("org.kde.konsoleqml");
     KIconTheme::initTheme();
     this->app = new QApplication(argc, argv);
     LOG_DEBUG("App", "Starting QApplication");
@@ -42,8 +44,15 @@ App::App(int argc, char *argv[])
     this->model_api_instance = new ModelApi();
     this->userPromptField = new UserPromptField();
     this->userPromptField->setApp((void *)this);
+    qmlRegisterSingletonType<TerminalTabModel>("org.kde.koolintelligence", 1, 0, "TerminalTabModel", [](QQmlEngine *, QJSEngine *) -> QObject * {
+        const auto self = TerminalTabModel::self();
+        QQmlEngine::setObjectOwnership(self, QQmlEngine::CppOwnership);
+        return self;
+    });
     registerInstance(this->chatHistoryModel, "ChatHistoryModel");
     registerInstance(this->userPromptField, "UserPromptField");
+
+
     this->engine->rootContext()->setContextObject(new KLocalizedContext(this->engine));
     this->engine->loadFromModule("org.kde.koolintelligence", "Main");
 }
