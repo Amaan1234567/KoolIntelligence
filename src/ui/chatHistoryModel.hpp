@@ -32,6 +32,8 @@ public:
 
     void removeChatMessage(int index);
 
+    void clearChatHistory();
+
 private:
     QVector<ChatMessage> m_chatHistory;
 };

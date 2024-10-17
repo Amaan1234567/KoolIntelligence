@@ -77,4 +77,5 @@ public:
     std::string generationWithImage(const std::string &prompt, const std::string &imagePath);
 
     std::string transcriptionService(std::vector<std::string> argv = std::vector<std::string>());
+    void resetCurSessionHistory();
 };

@@ -125,3 +125,9 @@ App::~App()
     delete this->model_api_instance;
     delete this->userPromptField;
 }
+
+void App::resetChat()
+{
+    this->chatHistoryModel->clearChatHistory();
+    this->model_api_instance->resetCurSessionHistory();
+}

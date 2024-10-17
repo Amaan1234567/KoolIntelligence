@@ -264,3 +264,8 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
     LOG_INFO("ModelApi", transcript);
     return transcript;
 }
+
+void ModelApi::resetCurSessionHistory()
+{
+    this->curSessionHistory.clear();
+}
