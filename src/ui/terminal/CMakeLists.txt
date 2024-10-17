@@ -1,0 +1,3 @@
+add_subdirectory(lib)
+target_sources(koolintelligence PRIVATE terminaltabmodel.cpp)
+target_include_directories(koolintelligence PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

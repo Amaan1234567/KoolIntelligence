@@ -1,0 +1,3 @@
+#disable clang format as this is copied from KDE repos
+DisableFormat: true
+SortIncludes: false
