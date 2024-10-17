@@ -79,4 +79,5 @@ public:
     std::string transcriptionService(std::vector<std::string> argv = std::vector<std::string>());
 
     void speak(std::string text);
+    void resetCurSessionHistory();
 };

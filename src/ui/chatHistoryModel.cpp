@@ -47,3 +47,10 @@ void ChatHistoryModel::removeChatMessage(int index)
     m_chatHistory.remove(index);
     endRemoveRows();
 }
+
+void ChatHistoryModel::clearChatHistory()
+{
+    beginResetModel();
+    m_chatHistory.clear();
+    endResetModel();
+}

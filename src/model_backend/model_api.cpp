@@ -266,6 +266,10 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
     return transcript;
 }
 
+void ModelApi::resetCurSessionHistory()
+{
+    this->curSessionHistory.clear();
+}
 void ModelApi::speak(std::string text)
 {
     auto ttsService = TTSService();
