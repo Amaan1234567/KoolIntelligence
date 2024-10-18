@@ -1,3 +1,6 @@
 [submodule "src/model_backend/thirdparty/whisper.cpp"]
 	path = src/model_backend/thirdparty/whisper.cpp
 	url = https://github.com/ggerganov/whisper.cpp.git
+[submodule "src/model_backend/thirdparty/bark.cpp"]
+	path = src/model_backend/thirdparty/bark.cpp
+	url = https://github.com/PABannier/bark.cpp.git

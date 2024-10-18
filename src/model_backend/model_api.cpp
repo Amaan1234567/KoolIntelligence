@@ -1,6 +1,7 @@
 #include "model_api.hpp"
 #include "logging.hpp"
 #include "transcribe_service.hpp"
+#include "tts_service.hpp"
 
 // Function to execute a command and get the output
 std::string ModelApi::execCommand(const std::string &command)
@@ -268,4 +269,9 @@ std::string ModelApi::transcriptionService(std::vector<std::string> args)
 void ModelApi::resetCurSessionHistory()
 {
     this->curSessionHistory.clear();
+}
+void ModelApi::speak(std::string text)
+{
+    auto ttsService = TTSService();
+    ttsService.speak(text);
 }
