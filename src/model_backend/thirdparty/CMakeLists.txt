@@ -1,9 +1,9 @@
 set(CMAKE_AUTOMOC OFF)
-set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc" CACHE FILEPATH "CUDA compiler")
+#set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc" CACHE FILEPATH "CUDA compiler")
 
 set(BUILD_SHARED_LIBS OFF)
 find_package(SDL2 REQUIRED)
-#enable_language(CUDA)
+enable_language(CUDA)
 
 add_subdirectory(whisper.cpp)
 

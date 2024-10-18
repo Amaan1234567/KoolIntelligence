@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Project definition
-project(KoolIntelligence VERSION 0.0.0 LANGUAGES CXX C)
+project(KoolIntelligence VERSION 0.0.0 LANGUAGES CXX)
 
 
 set(CMAKE_C_COMPILE_OBJECT_COMPILER /usr/bin/gcc)
