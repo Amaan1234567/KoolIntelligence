@@ -81,4 +81,5 @@ public:
     void resetCurSessionHistory();
 
     void speak(std::string text);
+
 };
