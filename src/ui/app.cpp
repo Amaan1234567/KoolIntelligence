@@ -65,7 +65,7 @@ int App::run()
     //     LOG_INFO("App", "File Search Result: " + result);
     // }
 
-    //this->model_api_instance->speak("hello, i am baymax, your personal healthcare companion");
+    // this->model_api_instance->speak("hello, i am baymax, your personal healthcare companion");
     if (this->engine->rootObjects().isEmpty()) {
         return -1;
     }
