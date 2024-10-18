@@ -1,6 +1,7 @@
 #include "app.hpp"
 #include "file_search.hpp"
 #include "logging.hpp"
+#include "transcribe_service.hpp"
 #include <KIconTheme>
 #include <KLocalizedContext>
 #include <KLocalizedString>
@@ -8,7 +9,6 @@
 #include <QQuickStyle>
 #include <QUrl>
 #include <QtQml>
-
 #include <pwd.h>
 #include <string>
 #include <unistd.h>
@@ -59,17 +59,20 @@ App::App(int argc, char *argv[])
 
 int App::run()
 {
-    // LOG_INFO("app", this->model_api_instance->transcriptionService());
-    // std::vector<std::string> results = fileSearchKDE("main.cpp");
-    // for (const std::string &result : results) {
-    //     LOG_INFO("App", "File Search Result: " + result);
-    // }
+    TranscribeService transcribeService;
+    std::pair<std::string *, bool*> result = transcribeService.startService();
     if (this->engine->rootObjects().isEmpty()) {
         return -1;
     }
     LOG_INFO("App", "Finished loading QML engine... Running app.exec()");
     int return_code = this->app->exec();
     LOG_INFO("App", "Exiting QApplication");
+    *result.second = false;
+    LOG_INFO("App", "Waiting for transcribe service to stop...");
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    delete result.first;
+    delete result.second;
+    LOG_INFO("App", "Freed memory for transcribe service");
     return return_code;
 }
 

@@ -234,37 +234,6 @@ std::string ModelApi::generationWithImage(const std::string &prompt, const std::
     return response.as_simple_string(); // Return the response as a string
 }
 
-std::string ModelApi::transcriptionService(std::vector<std::string> args)
-{
-    // pass args for transciption service in format ({"parameter_name","param_value","param_name","param_value"})
-    // check transcription_service.hpp to see all the parameters that can be set, for more info look at whisper.cpp repo
-
-    const std::string whisperCppPath = "~";
-    const std::string modelName = "ggml-small.en.bin";
-    const std::string neededFile = "/" + modelName;
-    const std::string modelNameInRepo = "small.en";
-    const std::string modelDownloadScriptPath = this->mainFolderPath + "scripts/download-ggml-model.sh";
-
-    // Check if the file exists using std::filesystem
-    if (!std::filesystem::exists(this->mainFolderPath + "models/" + neededFile)) {
-        LOG_INFO("ModelApi", "File not found, running installation script...");
-
-        int ret = system((modelDownloadScriptPath + " " + modelNameInRepo).c_str());
-
-        // Check the result of the script execution
-        if (ret != 0) {
-            LOG_ERROR("ModelApi", "Failed to run the installation script.");
-            return "error";
-        }
-    }
-
-    TranscribeService *service = new TranscribeService();
-    auto req = service->asyncRun();
-    std::string transcript = req.get();
-    LOG_INFO("ModelApi", transcript);
-    return transcript;
-}
-
 void ModelApi::resetCurSessionHistory()
 {
     this->curSessionHistory.clear();

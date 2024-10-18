@@ -2,16 +2,11 @@
 
 #include "logging.hpp"
 #include <cassert>
-#include <chrono>
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream>
-#include <future>
-#include <iostream>
 #include <string>
 #include <thread>
-#include <vector>
 
 // command-line parameters
 struct WhisperParams {
@@ -43,22 +38,17 @@ struct WhisperParams {
 
 class TranscribeService
 {
+private:
     bool silenceStart = false;
 
     std::string paramStructToStringConverter();
-
-    // std::chrono::time_point<std::chrono::high_resolution_clock> beg = std::chrono::high_resolution_clock::now();
+    void asyncService(std::string* result, bool* isRunning);
+    WhisperParams params;
 
 public:
-    WhisperParams params;
-    TranscribeService()
-    {
-        if (std::filesystem::exists("/usr/lib/libcuda.so"))
-            this->params.no_gpu = false;
-        else
-            this->params.no_gpu = true;
-    }
-
-    std::string run();
-    std::future<std::string> asyncRun();
+    TranscribeService();
+    //the string and bool have to be manually deleted after use
+    //returns the result of the transcription and a bool to check if the service is still running
+    //The string will be continuously updated with the transcription
+    std::pair<std::string*, bool*> startService(); 
 };

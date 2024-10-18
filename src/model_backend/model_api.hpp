@@ -1,16 +1,9 @@
 #pragma once
 
 #include "thirdparty/ollama.hpp"
-#include <array>
-#include <chrono>
 #include <cstdio>
 #include <cstdlib>
-#include <filesystem>
-#include <fstream>
-#include <memory>
-#include <stdexcept>
 #include <string>
-#include <thread>
 
 class ModelApi
 {
@@ -76,6 +69,5 @@ public:
     // Method to generate an image
     std::string generationWithImage(const std::string &prompt, const std::string &imagePath);
 
-    std::string transcriptionService(std::vector<std::string> argv = std::vector<std::string>());
     void resetCurSessionHistory();
 };

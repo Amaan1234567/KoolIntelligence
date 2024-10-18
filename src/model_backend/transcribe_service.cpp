@@ -1,4 +1,30 @@
 #include "transcribe_service.hpp"
+#include <array>
+
+TranscribeService::TranscribeService()
+{   
+    const std::string whisperCppPath = "~";
+    const std::string modelName = "ggml-small.en.bin";
+    const std::string neededFile = "/" + modelName;
+    const std::string modelNameInRepo = "small.en";
+    const std::string modelDownloadScriptPath = std::string(getenv("HOME")) + "/koolintelligence/" + "scripts/download-ggml-model.sh";
+
+    // Check if the file exists using std::filesystem
+    if (!std::filesystem::exists(std::string(getenv("HOME")) + "/koolintelligence/" + "models/" + neededFile)) {
+        LOG_INFO("ModelApi", "File not found, running installation script...");
+
+        int ret = system((modelDownloadScriptPath + " " + modelNameInRepo).c_str());
+
+        // Check the result of the script execution
+        if (ret != 0) {
+            LOG_ERROR("ModelApi", "Failed to run the installation script.");
+        }
+    }
+    if (std::filesystem::exists("/usr/lib/libcuda.so"))
+        this->params.no_gpu = false;
+    else
+        this->params.no_gpu = true;
+}
 
 std::string TranscribeService::paramStructToStringConverter()
 {
@@ -29,41 +55,32 @@ std::string TranscribeService::paramStructToStringConverter()
     return command;
 }
 
-std::future<std::string> TranscribeService::asyncRun()
-{
-    return std::async(std::launch::async, [this] {
-        return this->run();
-    });
+//note: The string and bool have to be manually deleted after use
+std::pair<std::string*, bool*>TranscribeService::startService()
+{   
+    std::string* result = new std::string();
+    bool* isRunning = new bool(true);
+    std::thread(&TranscribeService::asyncService, this, result, isRunning).detach();
+    return std::make_pair(result, isRunning);
 }
 
-std::string TranscribeService::run()
-{
-    if (std::filesystem::exists("/usr/lib/libcuda.so")) {
-        std::array<char, 128> buffer;
-        std::string result;
-        std::string command = this->paramStructToStringConverter();
-        command = "/usr/bin/cudaOnlyWhisper " + command;
-        std::cout << command << std::endl;
-        std::shared_ptr<FILE> pipe(popen(command.c_str(), "r"), pclose);
-        if (!pipe) {
-            throw std::runtime_error("popen() failed!");
-        }
-        while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-            result += buffer.data();
-        }
-        return result;
-    } else {
-        std::array<char, 128> buffer;
-        std::string result;
-        std::string command = this->paramStructToStringConverter();
-        command = "/usr/bin/cpuOnlyWhisper " + command;
-        std::shared_ptr<FILE> pipe(popen(command.c_str(), "r"), pclose);
-        if (!pipe) {
-            throw std::runtime_error("popen() failed!");
-        }
-        while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-            result += buffer.data();
-        }
-        return result;
+void TranscribeService::asyncService(std::string* result, bool* isRunning){
+    std::array<char, 128> buffer;
+    std::string command = this->paramStructToStringConverter();
+    command = (std::filesystem::exists("/usr/lib/libcuda.so") ? "/usr/bin/cudaOnlyWhisper " : "/usr/bin/cpuOnlyWhisper ") + command;
+    FILE *pipe = popen(command.c_str(), "r");
+    if (!pipe) {
+        throw std::runtime_error("popen() failed!");
     }
+    LOG_INFO("TranscribeService", "Service started");
+    while (fgets(buffer.data(), buffer.size(), pipe) != nullptr && *isRunning) {
+        LOG_INFO("TranscribeService", buffer.data());
+        *result += buffer.data();
+        if(!*isRunning){
+            LOG_INFO("TranscribeService", "Service stopped");
+            pclose(pipe);
+            return;
+        }
+    }
+    *isRunning = false;
 }
