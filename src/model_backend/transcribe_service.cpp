@@ -1,6 +1,6 @@
 #include "transcribe_service.hpp"
 #include <array>
-
+#include <iostream>
 TranscribeService::TranscribeService()
 {   
     const std::string whisperCppPath = "~";
@@ -48,6 +48,8 @@ std::string TranscribeService::paramStructToStringConverter()
     command += " --keep-context "+ this->params.keep_context;
     command += " --tinydiarize "+ this->params.tinydiarize;
     command += " --save-audio "+ this->params.save_audio; */
+    
+    std::cout<< this->params.no_gpu << std::endl;
     if (this->params.no_gpu)
         command += " --no-gpu ";
     if (this->params.flash_attn)
@@ -68,6 +70,7 @@ void TranscribeService::asyncService(std::string* result, bool* isRunning){
     std::array<char, 128> buffer;
     std::string command = this->paramStructToStringConverter();
     command = (std::filesystem::exists("/usr/lib/libcuda.so") ? "/usr/bin/cudaOnlyWhisper " : "/usr/bin/cpuOnlyWhisper ") + command;
+    LOG_INFO("TranscribeService", command);
     FILE *pipe = popen(command.c_str(), "r");
     if (!pipe) {
         throw std::runtime_error("popen() failed!");

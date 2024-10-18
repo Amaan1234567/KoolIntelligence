@@ -1,5 +1,5 @@
 set(CMAKE_AUTOMOC OFF)
-set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc" CACHE FILEPATH "CUDA compiler")
+#set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc" CACHE FILEPATH "CUDA compiler")
 
 set(BUILD_SHARED_LIBS OFF)
 find_package(SDL2 REQUIRED)
@@ -39,5 +39,5 @@ target_include_directories(cudaOnlyWhisper PRIVATE
 )
 target_link_libraries(cudaOnlyWhisper PRIVATE SDL2 whisper ${CUDA_LIBRARIES})
 
-target_compile_definitions(cudaOnlyWhisper PRIVATE GGML_USE_CUBLAS)
+target_compile_definitions(cudaOnlyWhisper PRIVATE GGML_CUDA=1)
 install(TARGETS cpuOnlyWhisper cudaOnlyWhisper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
