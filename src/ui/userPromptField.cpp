@@ -17,3 +17,16 @@ void UserPromptField::resetChat()
 {
     ((App *)this->app)->resetChat();
 }
+
+bool UserPromptField::getEnableChatField() const
+{
+    return enableChatField;
+}
+
+void UserPromptField::setEnableChatField(bool value)
+{
+    if (enableChatField != value) {
+        enableChatField = value;
+        Q_EMIT enableChatFieldChanged();
+    }
+}

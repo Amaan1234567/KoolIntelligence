@@ -1,9 +1,9 @@
 #include "chatHistoryModel.hpp"
 
-int ChatHistoryModel::addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft)
+int ChatHistoryModel::addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft, bool waitingForResponse)
 {
     beginInsertRows(QModelIndex(), m_chatHistory.count(), m_chatHistory.count());
-    m_chatHistory.append({chatText, author, time, alignLeft});
+    m_chatHistory.append({chatText, author, time, alignLeft, waitingForResponse});
     endInsertRows();
     return m_chatHistory.count() - 1;
 }
@@ -15,6 +15,7 @@ QHash<int, QByteArray> ChatHistoryModel::roleNames() const
     roles[AuthorRole] = "author";
     roles[TimeRole] = "time";
     roles[AlignLeftRole] = "alignLeft";
+    roles[WaitingForResponseRole] = "waitingForResponse";
     return roles;
 }
 
@@ -32,6 +33,8 @@ QVariant ChatHistoryModel::data(const QModelIndex &index, int role) const
         return message.time;
     else if (role == AlignLeftRole)
         return message.alignLeft;
+    else if (role == WaitingForResponseRole)
+        return message.waitingForResponse;
     return QVariant();
 }
 

@@ -83,6 +83,7 @@ static inline std::string getTimestamp()
 
 void App::userPrompt(const QString &text)
 {
+    this->userPromptField->setEnableChatField(false);
     LOG_DEBUG("App", "User Prompt: " + text.toStdString());
     this->chatHistoryModel->addChatMessage(text, QString::fromStdString(this->user_name), QString::fromStdString(getTimestamp()), true);
     std::future<std::string> futureMessage = std::async(std::launch::async, &ModelApi::getResponse, this->model_api_instance, text.toStdString());
@@ -90,7 +91,8 @@ void App::userPrompt(const QString &text)
     int chatIndex = this->chatHistoryModel->addChatMessage(QString().fromStdString("Waiting for response..."),
                                                            QString::fromStdString("Kool Intelligence"),
                                                            QString::fromStdString(getTimestamp()),
-                                                           false);
+                                                           false,
+                                                           true);
     std::thread(&App::getModelResponse, this, std::move(futureMessage), chatIndex).detach();
 }
 
@@ -103,6 +105,7 @@ void App::getModelResponse(std::future<std::string> futureMessage, int chatIndex
                                            QString::fromStdString("Kool Intelligence"),
                                            QString::fromStdString(getTimestamp()),
                                            false);
+    this->userPromptField->setEnableChatField(true);
 }
 
 void App::setUserName()

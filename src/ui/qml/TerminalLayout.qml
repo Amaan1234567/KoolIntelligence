@@ -47,9 +47,9 @@ ColumnLayout {
                     readonly property bool isCurrentItem: SwipeView.isCurrentItem
 
                     //TODO: Impment a way for user to change the customization of the terminal
-                    font.family: "Monospace"
+                    font.family: "monospace"
                     font.pixelSize: 12
-                    colorScheme: "cool-retro-term"
+                    colorScheme: root.terminalColorScheme
 
                     Component.onCompleted: {
 

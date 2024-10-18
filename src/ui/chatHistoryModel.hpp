@@ -8,6 +8,7 @@ struct ChatMessage {
     QString author;
     QString time;
     bool alignLeft;
+    bool waitingForResponse;
 };
 
 class ChatHistoryModel : public QAbstractListModel
@@ -15,7 +16,7 @@ class ChatHistoryModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    enum ChatRoles { ChatTextRole = Qt::UserRole + 1, AuthorRole, TimeRole, AlignLeftRole };
+    enum ChatRoles { ChatTextRole = Qt::UserRole + 1, AuthorRole, TimeRole, AlignLeftRole, WaitingForResponseRole };
 
     ChatHistoryModel(QObject *parent = nullptr)
         : QAbstractListModel(parent)
@@ -28,7 +29,7 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    int addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft);
+    int addChatMessage(const QString &chatText, const QString &author, const QString &time, bool alignLeft, bool waitingForResponse = false);
 
     void removeChatMessage(int index);
 

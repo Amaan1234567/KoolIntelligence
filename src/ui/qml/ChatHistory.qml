@@ -26,33 +26,39 @@ Controls.ScrollView {
             anchors.left: alignLeft ? parent?.left : undefined
             anchors.margins: 90
             contentItem: Item {
-            implicitHeight: messageLayout.implicitHeight
-            implicitWidth: messageLayout.implicitWidth
-            ColumnLayout {
-                id: messageLayout
-                width: parent.width
-                Kirigami.Heading {
-                text: author
-                level:5
-                Layout.alignment: alignLeft ? Qt.AlignLeft : Qt.AlignRight
+                implicitHeight: messageLayout.implicitHeight
+                implicitWidth: messageLayout.implicitWidth
+                ColumnLayout {
+                    id: messageLayout
+                    width: parent.width
+                    Kirigami.Heading {
+                        text: author
+                        level:5
+                        Layout.alignment: alignLeft ? Qt.AlignLeft : Qt.AlignRight
+                    }
+                    Kirigami.Separator {
+                        Layout.fillWidth: true
+                    }
+                    Kirigami.Heading {
+                        Layout.fillWidth: true
+                        text: chatText
+                        level: 3
+                        wrapMode: Text.WordWrap
+                        Layout.alignment: alignLeft ? Qt.AlignLeft : Qt.AlignRight
+                        textFormat: Text.MarkdownText
+                    }
+                    Kirigami.Heading {
+                        visible: !waitingForResponse
+                        text: time
+                        level: 9
+                        Layout.alignment: Qt.AlignRight
+                    }
+                    Controls.ProgressBar {
+                        visible: waitingForResponse
+                        indeterminate: true
+                        Layout.fillWidth: true
+                    }
                 }
-                Kirigami.Separator {
-                Layout.fillWidth: true
-                }
-                Kirigami.Heading {
-                Layout.fillWidth: true
-                text: chatText
-                level: 3
-                wrapMode: Text.WordWrap
-                Layout.alignment: alignLeft ? Qt.AlignLeft : Qt.AlignRight
-                textFormat: Text.MarkdownText
-                }
-                Kirigami.Heading {
-                text: time
-                level: 9
-                Layout.alignment: Qt.AlignRight
-                }
-            }
             }
         }
     }
