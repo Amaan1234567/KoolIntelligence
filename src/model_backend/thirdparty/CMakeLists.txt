@@ -41,39 +41,3 @@ target_link_libraries(cudaOnlyWhisper PRIVATE SDL2 whisper ${CUDA_LIBRARIES})
 
 target_compile_definitions(cudaOnlyWhisper PRIVATE GGML_USE_CUBLAS)
 install(TARGETS cpuOnlyWhisper cudaOnlyWhisper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
-
-add_executable(voice_out ${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/examples/main/main.cpp)
-target_sources(voice_out PRIVATE
-
-${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/encodec.cpp/ggml/src/ggml-alloc.c
-${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/encodec.cpp/ggml/src/ggml-backend.c
-
-)
-
-add_library(ggml_bark)
-
-target_sources(ggml_bark PRIVATE
-
-${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/encodec.cpp/ggml/src/ggml-alloc.c
-${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/encodec.cpp/ggml/src/ggml-backend.c
-
-)
-target_include_directories(ggml_bark PRIVATE
-${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/encodec.cpp/ggml/include/
-)
-
-add_library(bark)
-target_sources(bark PRIVATE
-${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/bark.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/encodec.cpp/encodec.cpp
-)
-target_include_directories(bark PRIVATE
-${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/spm-headers/ 
-)
-
-add_library(common)
-target_sources(common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/examples/common.cpp)
-target_include_directories(common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/bark.cpp/examples/)
-target_link_libraries(voice_out ggml_bark bark common)
-
